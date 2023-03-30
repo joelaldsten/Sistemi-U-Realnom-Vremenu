@@ -155,26 +155,33 @@ servo_contr = Servo_controller()
 cflib.crtp.init_drivers()                        # Initiate drivers for crazyflie
 uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie via USB
 cl = CrazyLogger(uri)
-
-for i in range(10):
-    print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-    servo_contr.actuate(100, 0, 0)
+print("Start pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+for i in range(100):
+    servo_contr.actuate(1023, 0, 0)
     time.sleep(0.1)
+print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 for i in range(10):
     servo_contr.actuate(0, 0, 0)
     time.sleep(0.1)
-for i in range(10):
-    servo_contr.actuate(0, 100, 0)
+print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+for i in range(100):
+    servo_contr.actuate(600, 600, 0)
     time.sleep(0.1)
+print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 for i in range(10):
     servo_contr.actuate(0, 0, 0)
     time.sleep(0.1)
-for i in range(10):
-    servo_contr.actuate(0, 0, 100)
+print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+for i in range(100):
+    servo_contr.actuate(0, 300, 300)
     time.sleep(0.1)
+print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 for i in range(10):
     servo_contr.actuate(0, 0, 0)
     time.sleep(0.1)
-for i in range(10):
+print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+for i in range(100):
     servo_contr.actuate(1023,1023,1023)
     time.sleep(0.1)
+print("End pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+cl.disconnect()
