@@ -1,5 +1,5 @@
-import cflib.crazyflie
-import cflib.positioning.position_hl_commander
+from cflib.crazyflie import Crazyflie
+from cflib.positioning import PositionHlCommander
 from cflib.utils import uri_helper
 import time
 
