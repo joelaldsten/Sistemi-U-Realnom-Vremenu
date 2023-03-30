@@ -4,12 +4,46 @@ class MarkingTool:
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry("1200x800")
+                
+        params = []
+
+
+        def get_input(elems):
+            for elem in elems:
+                param = elem.get(1.0,tk.END)
+                print(param)
+                params.append(param)
 
         self.frame = tk.Frame(self.root, width=600, height=600, bg='white', borderwidth=2, relief='groove')
         self.frame.place(relx=0.05, rely=0.15)
 
         self.canvas = tk.Canvas(self.frame, width=600, height=600)
         self.canvas.pack()
+
+        self.parameters_frame = tk.Frame(self.root, width=300, height=500, bg='white',borderwidth=2, relief='groove')
+        self.parameters_frame.place(relx=0.6, rely=0.15)
+        self.parameters_label = tk.Label(self.parameters_frame, text="Choose controller parameters")
+        self.parameters_label.place(relx=0.1, rely=0)
+        
+        self.k_label = tk.Label(self.parameters_frame, text="k")
+        self.k_label.place(relx=0.1, rely=0.1)
+
+        self.k_text = tk.Text(self.parameters_frame, width=10, height=1)
+        self.k_text.place(relx=0.4, rely=0.1)
+
+
+
+        self.ti_label = tk.Label(self.parameters_frame, text="ti")
+        self.ti_label.place(relx=0.1, rely=0.2)
+
+        self.ti_text = tk.Text(self.parameters_frame, width=10, height=1)
+        self.ti_text.place(relx=0.4, rely=0.2)
+
+
+
+
+        self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: get_input([self.k_text, self.ti_text]))
+        self.configuration_button.place(relx=0.2, rely=0.9)
 
         self.canvas.bind("<Button-1>", self.mark_point)
         self.points = []
@@ -30,6 +64,7 @@ class MarkingTool:
         self.controller_menu.add_command(label="Pause")
         self.menu_bar.add_cascade(label="Controller Menu", menu=self.controller_menu)
         self.root.config(menu=self.menu_bar)
+
 
     def mark_point(self, event, robot_x=None, robot_y=None):
         """x, y = event.x, event.y
