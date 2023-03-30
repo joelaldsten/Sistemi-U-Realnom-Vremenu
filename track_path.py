@@ -204,16 +204,16 @@ if __name__ == '__main__':
         filename = "trajectory.csv"
 
 	# Load trajectory
-    print("Attempting to load trajectory file",filename)
-    trajectory = pd.read_csv(filename)
-    print("\nTrajectory loaded.")
-    x = trajectory.x.to_numpy()
-    y = trajectory.y.to_numpy()
+    #print("Attempting to load trajectory file",filename)
+    #trajectory = pd.read_csv(filename)
+    #print("\nTrajectory loaded.")
+    #x = trajectory.x.to_numpy()
+    #y = trajectory.y.to_numpy()
     # Update theta to be in correct range (-pi,pi)
     theta = ((trajectory.theta + np.pi).mod(2*np.pi)-np.pi).to_numpy() # Put theta in range -pi -> pi instead of 0 -> 2pi
     
     #Find derivatives
-    trajectory[["xdot","ydot","thetadot"]] = trajectory[["x","y","theta"]].diff(axis = 0).fillna(0)/0.1
+    #trajectory[["xdot","ydot","thetadot"]] = trajectory[["x","y","theta"]].diff(axis = 0).fillna(0)/0.1
         
     #FUDGE FACTOR TO DECREASE SPEED FOR TESTING!!!!
     # Should probably be removed in future iterations. Was included because
@@ -222,13 +222,13 @@ if __name__ == '__main__':
     velref = trajectory[['xdot','ydot','thetadot']].to_numpy()/fudgefactor
     
     # Create time vector
-    dt = trajectory.t.diff().mean()*fudgefactor
-    t = trajectory.t.to_numpy()*fudgefactor
-    tend = t[-1]
-    n = t.size
-    print("Sample time:",dt)
-    print("Experiment time:",tend)
-    print("Time steps:",n)
+    #dt = trajectory.t.diff().mean()*fudgefactor
+    #t = trajectory.t.to_numpy()*fudgefactor
+    #tend = t[-1]
+    #n = t.size
+    #print("Sample time:",dt)
+    #print("Experiment time:",tend)
+    #print("Time steps:",n)
 
 	# Read controller parameters
     if len(sys.argv) > 3:
@@ -266,38 +266,42 @@ if __name__ == '__main__':
     cflib.crtp.init_drivers()       # Initiate drivers for crazyflie
     uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie via USB
     cl = CrazyLogger(uri)           # Create a crazyflie-based logger
-    pi = SimplePI(kp,ki,dt)         # Create a PI-controller 
+    #pi = SimplePI(kp,ki,dt)         # Create a PI-controller 
 
 
     time.sleep(1) # Wait for connection to work
     t0 = time.time()
     
     # Main control loop
-    for i in range(n-1):
-		
-		# Read current position error:
-        e = np.array([trajectory.x.iloc[i]-cl.x(),trajectory.y.iloc[i]-cl.y(),trajectory.theta.iloc[i]-cl.theta()])
-        
-        # Create reference speed through feed-forward (velref) and feedback (pi):
-        xdot = velref[i,:] + pi.update_control(e)
-        
-        # Transform from x,y,theta-speeds to wheel rotational speeds.
-        ph = phidot(xdot,cl.theta())
-        
-        # Set all servospeeds (enact control signal)
-        for (j,s) in enumerate(servos):
-            s.goal_velocity.write(round(ph[j]))
-        
-        # Printing position and tracking error
-        print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-        print("Position error:",e,"\n")
-            
-		# Wait until next loop-iteration
-        time.sleep(max(t[i+1]+t0-time.time(),0))
-        
-        
-        
+    #for i in range(n-1):
+	#	
+	#	# Read current position error:
+    #    e = np.array([trajectory.x.iloc[i]-cl.x(),trajectory.y.iloc[i]-cl.y(),trajectory.theta.iloc[i]-cl.theta()])
+    #    
+    #    # Create reference speed through feed-forward (velref) and feedback (pi):
+    #    xdot = velref[i,:] + pi.update_control(e)
+    #    
+    #    # Transform from x,y,theta-speeds to wheel rotational speeds.
+    #    ph = phidot(xdot,cl.theta())
+    #    
+    #    # Set all servospeeds (enact control signal)
+    #    for (j,s) in enumerate(servos):
+    #        s.goal_velocity.write(round(ph[j]))
+    #    
+    #    # Printing position and tracking error
+    #    print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+    #    print("Position error:",e,"\n")
+    #        
+	#	# Wait until next loop-iteration
+    #    time.sleep(max(t[i+1]+t0-time.time(),0))
+    #    
+    #    
+    #    
     # Shutdown
+    for n in range(1000):
+        print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+        time.sleep(0.1)
+
     print("Experiment done, shutting down servos and logger")
     for s in servos:
         s.goal_velocity.write(0)
