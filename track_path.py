@@ -24,9 +24,9 @@ logging.basicConfig(level=logging.ERROR)
 ########################################################################
 
 def load_servos():
-"""
-Servo load function, based on the dynamixel implementation of Anders Blomdell.
-"""
+#"""
+#Servo load function, based on the dynamixel implementation of Anders Blomdell.
+#"""
 
 # The speed and channel numbers can be found and checked via the dynamixel software "dynamixel wizard".
 # The device can be found by e.g. lsusb, and is currently adapted for the three-color robots.
