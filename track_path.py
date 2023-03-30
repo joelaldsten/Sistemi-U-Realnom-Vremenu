@@ -145,7 +145,7 @@ class CrazyLogger:
         """Callback from a the log API when data arrives"""
         #print(f'[{timestamp}][{logconf.name}]: ', end='')
         for name, value in data.items():
-            self._state[self._namelink[name]] = value
+            self._state[self.namelink[name]] = value
             #print(f'{name}: {value:3.3f} ', end='\n')
         #print()
 
@@ -168,12 +168,12 @@ class CrazyLogger:
     def x(self):
 		#""" Return x-position of robot center"""
 		# Note that the offset of the crazyflie mount position is included
-        return self._state[0] - np.sin(np.deg2rad(self._state[3]))*self._position_offset 
+        return self._state[0] - np.sin(np.deg2rad(self._state[3]))*self.position_offset 
     
     def y(self):
 		#""" Return y-position of robot center"""
 		# Note that the offset of the crazyflie mount position is included
-        return self._state[1] + np.cos(np.deg2rad(self._state[3]))*self._position_offset 
+        return self._state[1] + np.cos(np.deg2rad(self._state[3]))*self.position_offset 
     
     def z(self):
 		#""" Return z-position of robot center"""
@@ -210,7 +210,7 @@ if __name__ == '__main__':
     #x = trajectory.x.to_numpy()
     #y = trajectory.y.to_numpy()
     # Update theta to be in correct range (-pi,pi)
-    theta = ((trajectory.theta + np.pi).mod(2*np.pi)-np.pi).to_numpy() # Put theta in range -pi -> pi instead of 0 -> 2pi
+    #theta = ((trajectory.theta + np.pi).mod(2*np.pi)-np.pi).to_numpy() # Put theta in range -pi -> pi instead of 0 -> 2pi
     
     #Find derivatives
     #trajectory[["xdot","ydot","thetadot"]] = trajectory[["x","y","theta"]].diff(axis = 0).fillna(0)/0.1
@@ -219,7 +219,7 @@ if __name__ == '__main__':
     # Should probably be removed in future iterations. Was included because
     # the robot was exceeding servo speed settings.
     fudgefactor = 3.0
-    velref = trajectory[['xdot','ydot','thetadot']].to_numpy()/fudgefactor
+    #velref = trajectory[['xdot','ydot','thetadot']].to_numpy()/fudgefactor
     
     # Create time vector
     #dt = trajectory.t.diff().mean()*fudgefactor
