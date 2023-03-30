@@ -166,21 +166,21 @@ class CrazyLogger:
         self.is_connected = False
         
     def x(self):
-		""" Return x-position of robot center"""
+		#""" Return x-position of robot center"""
 		# Note that the offset of the crazyflie mount position is included
         return self._state[0] - np.sin(np.deg2rad(self._state[3]))*self._position_offset 
     
     def y(self):
-		""" Return y-position of robot center"""
+		#""" Return y-position of robot center"""
 		# Note that the offset of the crazyflie mount position is included
         return self._state[1] + np.cos(np.deg2rad(self._state[3]))*self._position_offset 
     
     def z(self):
-		""" Return z-position of robot center"""
+		#""" Return z-position of robot center"""
         return self._state[2]
     
     def theta(self):
-		""" Return direction of robot center, measured in radians between -pi and pi."""
+		#""" Return direction of robot center, measured in radians between -pi and pi."""
 		# Note that the offset of the crazyflie mount position is included
         return np.mod(self._state[3]*np.pi/180 + 11*np.pi/6,2*np.pi)-np.pi
     
@@ -285,7 +285,7 @@ if __name__ == '__main__':
         ph = phidot(xdot,cl.theta())
         
         # Set all servospeeds (enact control signal)
-		for (j,s) in enumerate(servos):
+        for (j,s) in enumerate(servos):
             s.goal_velocity.write(round(ph[j]))
         
         # Printing position and tracking error
