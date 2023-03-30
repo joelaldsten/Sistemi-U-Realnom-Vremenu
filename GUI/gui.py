@@ -3,12 +3,12 @@ import tkinter as tk
 class MarkingTool:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.geometry("1000x600")
+        self.root.geometry("1200x800")
 
-        self.frame = tk.Frame(self.root, width=400, height=400, bg='white', borderwidth=2, relief='groove')
+        self.frame = tk.Frame(self.root, width=600, height=600, bg='white', borderwidth=2, relief='groove')
         self.frame.place(relx=0.05, rely=0.15)
 
-        self.canvas = tk.Canvas(self.frame, width=400, height=400)
+        self.canvas = tk.Canvas(self.frame, width=600, height=600)
         self.canvas.pack()
 
         self.canvas.bind("<Button-1>", self.mark_point)
@@ -18,10 +18,18 @@ class MarkingTool:
         self.coord_label.place(relx=0.05, rely=0.05)
 
         self.coord_text = tk.Text(self.root, width=30, height=2)
-        self.coord_text.place(relx=0.05, rely=0.05)
+        self.coord_text.place(relx=0.2, rely=0.05)
 
         self.robot_lines = []
 
+        # Create a drop-down menu
+        self.menu_bar = tk.Menu(self.root)
+        self.controller_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.controller_menu.add_command(label="Start")
+        self.controller_menu.add_command(label="Stop")
+        self.controller_menu.add_command(label="Pause")
+        self.menu_bar.add_cascade(label="Controller Menu", menu=self.controller_menu)
+        self.root.config(menu=self.menu_bar)
 
     def mark_point(self, event, robot_x=None, robot_y=None):
         """x, y = event.x, event.y
@@ -46,7 +54,7 @@ class MarkingTool:
             start_x, start_y = self.points[-2]
             end_x, end_y = self.points[-1]
             line = self.canvas.create_line(start_x, start_y, end_x, end_y, fill="blue")
-            self.robot_lines.append(line)
+            self.robot_lines.append(line)    
 
     def run(self):
         self.root.mainloop()
