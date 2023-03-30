@@ -44,5 +44,5 @@ for i in range(10):
     servo_contr.actuate(0, 0, 0)
     time.sleep(0.1)
 for i in range(10):
-    servo_contr.actuate(330,330,330)
+    servo_contr.actuate(1023,1023,1023)
     time.sleep(0.1)
