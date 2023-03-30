@@ -1,3 +1,4 @@
+import numpy as np
 # Dynamixel packages
 from dynamixel.model.xm430_w210_t_r import XM430_W210_T_R
 import dynamixel.channel
