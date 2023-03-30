@@ -1,0 +1,3 @@
+needed to get position:
+cflib.positioning.get_poisition() returns (x,y,z)
+
