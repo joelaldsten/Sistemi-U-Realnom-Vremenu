@@ -4,6 +4,7 @@ class MarkingTool:
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry("1200x800")
+        self.root.title("Project GUI")
                 
         params = []
 
@@ -15,49 +16,77 @@ class MarkingTool:
                 return False
 
         def get_input(elems):
+            params.clear()
+            # clear erro label
+            self.error_label.config(text="")
             for elem in elems:
                 param = elem.get(1.0,"end-1c")
                 print(param)
                 if isFloat(param):
                     params.append(float(param))
+                    
                 else:
                     params.append(float(0))
-                    self.error_label.config(text=f"Wrong format of input: {param}") 
+                    self.error_label.config(text=f"Wrong format of input: '{param}'") 
 
             print(params)
 
-
+        ## Canvas ##
         self.frame = tk.Frame(self.root, width=600, height=600, bg='white', borderwidth=2, relief='groove')
         self.frame.place(relx=0.05, rely=0.15)
 
         self.canvas = tk.Canvas(self.frame, width=600, height=600)
         self.canvas.pack()
 
+        ## Paramaters ##
         self.parameters_frame = tk.Frame(self.root, width=300, height=500, bg='white',borderwidth=2, relief='groove')
         self.parameters_frame.place(relx=0.6, rely=0.15)
         self.parameters_label = tk.Label(self.parameters_frame, text="Choose controller parameters")
         self.parameters_label.place(relx=0.1, rely=0)
         
-        self.k_label = tk.Label(self.parameters_frame, bg='white', text="k")
+        ## K ##
+        self.k_label = tk.Label(self.parameters_frame, bg='white', text="K")
         self.k_label.place(relx=0.1, rely=0.1)
 
         self.k_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.k_text.place(relx=0.4, rely=0.1)
 
-
-
-        self.ti_label = tk.Label(self.parameters_frame, bg='white', text="ti")
+        ## Ti ##
+        self.ti_label = tk.Label(self.parameters_frame, bg='white', text="Ti")
         self.ti_label.place(relx=0.1, rely=0.2)
 
         self.ti_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.ti_text.place(relx=0.4, rely=0.2)
 
+        ## h ##
+        self.h_label = tk.Label(self.parameters_frame, bg='white', text="h")
+        self.h_label.place(relx=0.1, rely=0.3)
+
+        self.h_text = tk.Text(self.parameters_frame, width=10, height=1)
+        self.h_text.place(relx=0.4, rely=0.3)
+
+        ## beta ##
+        self.beta_label = tk.Label(self.parameters_frame, bg='white', text="beta")
+        self.beta_label.place(relx=0.1, rely=0.4)
+
+        self.beta_text = tk.Text(self.parameters_frame, width=10, height=1)
+        self.beta_text.place(relx=0.4, rely=0.4)
+
+        ## Tr ##
+        self.tr_label = tk.Label(self.parameters_frame, bg='white', text="Tr")
+        self.tr_label.place(relx=0.1, rely=0.5)
+
+        self.tr_text = tk.Text(self.parameters_frame, width=10, height=1)
+        self.tr_text.place(relx=0.4, rely=0.5)
+
+
+        ## Error message ##
         self.error_label = tk.Label(self.parameters_frame, bg='white', text="")
         self.error_label.place(relx=0.2, rely=0.8)
 
 
-
-        self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: get_input([self.k_text, self.ti_text]))
+        ## Apply parameters button ##
+        self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: get_input([self.k_text, self.ti_text, self.h_text, self.beta_text, self.tr_text]))
         self.configuration_button.place(relx=0.2, rely=0.9)
 
         self.canvas.bind("<Button-1>", self.mark_point)
