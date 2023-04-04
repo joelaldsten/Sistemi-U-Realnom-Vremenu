@@ -1,12 +1,13 @@
 import tkinter as tk
 
-class MarkingTool:
+class GUI:
+    parameters = []
+
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry("1200x800")
         self.root.title("Project GUI")
                 
-        params = []
 
         def isFloat(num):
             try:
@@ -16,20 +17,20 @@ class MarkingTool:
                 return False
 
         def get_input(elems):
-            params.clear()
+            self.parameters.clear()
             # clear erro label
             self.error_label.config(text="")
             for elem in elems:
                 param = elem.get(1.0,"end-1c")
                 print(param)
                 if isFloat(param):
-                    params.append(float(param))
+                    self.parameters.append(float(param))
                     
                 else:
-                    params.append(float(0))
+                    self.parameters.append(float(0))
                     self.error_label.config(text=f"Wrong format of input: '{param}'") 
 
-            print(params)
+            print(self.parameters)
 
         ## Canvas ##
         self.frame = tk.Frame(self.root, width=600, height=600, bg='white', borderwidth=2, relief='groove')
@@ -110,6 +111,13 @@ class MarkingTool:
         self.root.config(menu=self.menu_bar)
 
 
+    def get_parameters(self):
+        return self.parameters
+    
+    # Get reference points
+    def get_ref_points(self):
+        return self.points
+
     def mark_point(self, event, robot_x=None, robot_y=None):
         """x, y = event.x, event.y
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
@@ -119,6 +127,7 @@ class MarkingTool:
         x, y = event.x, event.y
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
         self.points.append((x, y))
+
         print(f"Robot at ({x}, {y})")
 
         self.coord_text.delete("1.0", tk.END)
@@ -136,17 +145,4 @@ class MarkingTool:
             self.robot_lines.append(line)    
 
     def run(self):
-        self.root.mainloop()
-
-if __name__ == '__main__':
-    tool = MarkingTool()
-
-
-    tool.run()
-
-""" if __name__ == '__main__':
-    tool = MarkingTool()
-    tool.run()
- """
-
- 
+        self.root.mainloop() 
