@@ -34,16 +34,6 @@ class GUI:
         self.option_menu = tk.OptionMenu(self.root, self.option_var, "PID", "Kalman", "MPC", command=self.update_gui)
         self.option_menu.place(relx=0.6, rely=0.05)
 
-        # Create a drop-down menu
-        self.menu_bar = tk.Menu(self.root)
-        self.controller_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.controller_menu.add_command(label="PID")
-        self.controller_menu.add_command(label="Kalman")
-        self.controller_menu.add_command(label="MPC")
-        self.menu_bar.add_cascade(label="Controller Menu", menu=self.controller_menu)
-        self.root.config(menu=self.menu_bar)
-
-
     def get_parameters(self):
         return self.params
     
