@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class MarkingTool:
+class GUI:
     params = []
     def __init__(self):
         self.root = tk.Tk()
@@ -44,6 +44,13 @@ class MarkingTool:
         self.root.config(menu=self.menu_bar)
 
 
+    def get_parameters(self):
+        return self.params
+    
+    # Get reference points
+    def get_ref_points(self):
+        return self.points
+
     def mark_point(self, event, robot_x=None, robot_y=None):
         """x, y = event.x, event.y
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
@@ -53,6 +60,7 @@ class MarkingTool:
         x, y = event.x, event.y
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
         self.points.append((x, y))
+
         print(f"Robot at ({x}, {y})")
 
         self.coord_text.delete("1.0", tk.END)
@@ -168,17 +176,4 @@ class MarkingTool:
             pass 
 
     def run(self):
-        self.root.mainloop()
-
-if __name__ == '__main__':
-    tool = MarkingTool()
-
-
-    tool.run()
-
-""" if __name__ == '__main__':
-    tool = MarkingTool()
-    tool.run()
- """
-
- 
+        self.root.mainloop() 
