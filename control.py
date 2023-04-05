@@ -8,13 +8,14 @@ class PI:
     
     def calculate_output(self, y_i, ref_i):
         self._e_i = ref_i - y_i
-        v = self._p.K * (self._p.beta * (ref_i - y_i)) + self._I
+        v = self._p.K * (self._p.beta * (self._e_i)) + self._I
         return v
 
 
     def update_state(self, u):
-        self._I += (self._p.K*self._p.h / self._p.Ti)*self._e_i + (self._p.h / self._p.Tr)*(u - self._v)
-        print("integral: ", self._I)
+        #self._I += (self._p.K*self._p.h / self._p.Ti)*self._e_i + (self._p.h / self._p.Tr)*(u - self._v)
+        self._I = 0
+        #print("integral: ", self._I)
      
 class PIParameters:
     
