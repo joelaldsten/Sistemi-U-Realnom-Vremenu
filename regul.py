@@ -19,7 +19,7 @@ class Regul:
             return 1023
         elif v < -1023:
             return -1023
-        return v
+        return round(v)
     
     def set_ref(self,x,y,theta):
         self._xRef = x
