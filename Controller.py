@@ -1,4 +1,5 @@
 import numpy as np
+import threading
 # Dynamixel packages
 from dynamixel.model.xm430_w210_t_r import XM430_W210_T_R
 import dynamixel.channel
@@ -12,6 +13,11 @@ import cflib.crtp  # noqa
 from cflib.crazyflie import Crazyflie
 from cflib.crazyflie.log import LogConfig
 from cflib.utils import uri_helper
+
+from control import PI
+from control import PIParameters
+
+from regul import Regul
 
 class Servo_controller:
 
@@ -157,33 +163,54 @@ cflib.crtp.init_drivers()                        # Initiate drivers for crazyfli
 uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie via USB
 cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
-print("Start pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(100):
-    servo_contr.actuate(1023, 0, 0)
-    time.sleep(0.1)
-print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(10):
-    servo_contr.actuate(0, 0, 0)
-    time.sleep(0.1)
-print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(100):
-    servo_contr.actuate(600, 600, 0)
-    time.sleep(0.1)
-print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(10):
-    servo_contr.actuate(0, 0, 0)
-    time.sleep(0.1)
-print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(100):
-    servo_contr.actuate(0, 300, 300)
-    time.sleep(0.1)
-print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(10):
-    servo_contr.actuate(0, 0, 0)
-    time.sleep(0.1)
-print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-for i in range(100):
-    servo_contr.actuate(1023,1023,1023)
-    time.sleep(0.1)
-print("End pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+
+piParam = PIParameters(2,2,0.1,0.5,1)
+
+pi_x = PI(piParam)
+pi_y = PI(piParam)
+pi_theta = PI(piParam)
+
+reg = Regul(pi_x, pi_y, pi_theta, 0.1, servo_contr, cl)
+reg.set_ref(-0.3, 1, 1)
+
+lock = threading.Lock()
+t1 = threading.Thread(target=reg.runMethod(), args=(lock,))
+t1.start()
+
+while True:
+    print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+    time.sleep(1)
+
+
+
+
+# print("Start pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(100):
+#     servo_contr.actuate(1023, 0, 0)
+#     time.sleep(0.1)
+# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(10):
+#     servo_contr.actuate(0, 0, 0)
+#     time.sleep(0.1)
+# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(100):
+#     servo_contr.actuate(600, 600, 0)
+#     time.sleep(0.1)
+# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(10):
+#     servo_contr.actuate(0, 0, 0)
+#     time.sleep(0.1)
+# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(100):
+#     servo_contr.actuate(0, 300, 300)
+#     time.sleep(0.1)
+# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(10):
+#     servo_contr.actuate(0, 0, 0)
+#     time.sleep(0.1)
+# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
+# for i in range(100):
+#     servo_contr.actuate(1023,1023,1023)
+#     time.sleep(0.1)
+# print("End pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 cl.disconnect()
