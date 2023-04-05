@@ -174,12 +174,10 @@ reg = Regul(pi_x, pi_y, pi_theta, 0.1, servo_contr, cl)
 reg.set_ref(-0.3, 1, 1)
 
 lock = threading.Lock()
-t1 = threading.Thread(target=reg.runMethod(lock), args=(lock,))
-t1.start()
 
 while True:
     print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-    time.sleep(1)
+    reg.runMethod(lock)
 
 
 
