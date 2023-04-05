@@ -156,6 +156,7 @@ servo_contr = Servo_controller()
 cflib.crtp.init_drivers()                        # Initiate drivers for crazyflie
 uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie via USB
 cl = CrazyLogger(uri)
+time.sleep(1) # Wait for connection to work
 print("Start pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 for i in range(100):
     servo_contr.actuate(1023, 0, 0)
