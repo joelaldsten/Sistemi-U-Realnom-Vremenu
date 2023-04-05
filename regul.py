@@ -22,15 +22,17 @@ class Regul:
         return round(v)
     
     def set_ref(self,x,y,theta):
-        self._xRef = x
-        self._yRef = y 
-        self._thetaRef = theta
+        self._x_ref = x
+        self._y_ref = y 
+        self._theta_ref = theta
     
     def runMethod(self, lock):
 
         while True:
+            print("x:",self._crazy_logger.x(),"\t y:",self._crazy_logger.y(),"\t theta:",self._crazy_logger.theta())
             t = time.time()
             (x , y, theta) = (self._crazy_logger.x(), self._crazy_logger.y(), self._crazy_logger.theta())
+            
 
             lock.acquire()
             #Calculate output and limit it 

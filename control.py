@@ -14,6 +14,7 @@ class PI:
 
     def update_state(self, u):
         self._I += (self._p.K*self._p.h / self._p.Ti)*self._e_i + (self._p.h / self._p.Tr)*(u - self._v)
+        print("integral: ", self._I)
      
 class PIParameters:
     

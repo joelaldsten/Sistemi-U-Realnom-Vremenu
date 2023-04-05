@@ -175,9 +175,7 @@ reg.set_ref(-0.3, 1, 1)
 
 lock = threading.Lock()
 
-while True:
-    print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-    reg.runMethod(lock)
+reg.runMethod(lock)
 
 
 
