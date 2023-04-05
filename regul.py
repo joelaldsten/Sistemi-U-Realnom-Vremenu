@@ -38,15 +38,15 @@ class Regul:
             #Calculate output and limit it 
             u_x = self.limit_v(self._PIx.calculate_output(x, self._x_ref))
             u_y = self.limit_v(self._PIy.calculate_output(y, self._y_ref))
-            u_t = self.limit_v(self._PIt.calculate_output(theta, self._theta_ref))
+            #u_t = self.limit_v(self._PIt.calculate_output(theta, self._theta_ref))
             
             #Output the controlsignals
-            self._servo_controller.actuate(u_x, u_y, u_t)
+            self._servo_controller.actuate(u_x, u_y, 0)
 
             #Update states
             self._PIx.update_state(u_x)
             self._PIy.update_state(u_y)
-            self._PIt.update_state(u_t)
+            #self._PIt.update_state(u_t)
             lock.release()
 
             t1 = time.time()

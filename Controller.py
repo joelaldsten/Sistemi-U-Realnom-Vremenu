@@ -171,7 +171,7 @@ pi_y = PI(piParam)
 pi_theta = PI(piParam)
 
 reg = Regul(pi_x, pi_y, pi_theta, 0.1, servo_contr, cl)
-reg.set_ref(-0.3, 1, 1)
+reg.set_ref(0, 0, 0)
 
 lock = threading.Lock()
 
