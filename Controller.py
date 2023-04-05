@@ -129,7 +129,6 @@ class CrazyLogger:
     def x(self):
 		# Return x-position of robot center
 		# Note that the offset of the crazyflie mount position is included
-        print("current x = ", self._state[0] - np.sin(np.deg2rad(self._state[3]))*self.position_offset )
         return self._state[0] - np.sin(np.deg2rad(self._state[3]))*self.position_offset 
     
     def y(self):
