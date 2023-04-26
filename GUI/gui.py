@@ -175,9 +175,12 @@ class GUI:
     def send_data(self, data):
             print("xdddd1")
             if self.socket == None:
-                print("xdddd2")
-                self.socket = socket.create_server(("", 55555))
-            self.socket.sendall(bytes(data, encoding='utf8'))
+                s = socket.create_server(("", 55555))
+                s.listen()
+                conn, addr = s.accept()
+                print("conectio vbdsaivb")
+                self.socket = conn
+            self.socket.sendall(bytes(data, encoding='ASCII'))
             print('sent| ' + data)
 
     def run(self):
