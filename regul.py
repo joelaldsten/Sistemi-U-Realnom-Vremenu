@@ -39,7 +39,7 @@ class Regul:
             print("x:",self._crazy_logger.x(),"\t y:",self._crazy_logger.y(),"\t theta:",self._crazy_logger.theta())
             t = time.time()
             angle = self._crazy_logger.theta()
-            e = np.array([self._x_ref - self._crazy_logger.x(), self._y_ref - self._crazy_logger.y(), self._theta_ref - angle])
+            e = np.array([self._x_ref - self._crazy_logger.x(), self._y_ref - self._crazy_logger.y(), 10*(self._theta_ref - angle)])
             
             #Calculate output and limit it 
             v = self._PI.calculate_output(e)
