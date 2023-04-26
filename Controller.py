@@ -175,7 +175,6 @@ reg.runMethod()
 
 
 
-
 # print("Start pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 # for i in range(100):
 #     servo_contr.actuate(1023, 0, 0)

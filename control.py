@@ -13,7 +13,6 @@ class PI:
         v = self._p.K * (self._p.beta * (self._e)) + self._I
         return v
 
-
     def update_state(self, u):
         #self._I += (self._p.K*self._p.h / self._p.Ti)*self._e + (self._p.h / self._p.Tr)*(u - self._v)
         self._I = 0
