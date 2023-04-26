@@ -171,10 +171,12 @@ class GUI:
             pass 
 
     def send_data(self, data):
+            print("xdddd1")
             if self.socket == None:
+                print("xdddd2")
                 self.socket = socket.socket()
                 self.socket.connect(("kanelbulle.duckdns.org", 55555))
-            self.socket.sendall(bytes(data))
+            self.socket.sendall(bytes(data, encoding='utf8'))
             print('sent| ' + data)
 
     def run(self):
