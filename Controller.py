@@ -164,19 +164,14 @@ uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie 
 cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
 
-piParam = PIParameters(50,2,0.1,1,1)
+piParam = PIParameters(20,2,0.1,1,1)
 
-pi_x = PI(piParam)
-pi_y = PI(piParam)
-pi_theta = PI(piParam)
+pi = PI(piParam)
 
-reg = Regul(pi_x, pi_y, pi_theta, 0.1, servo_contr, cl)
+reg = Regul(pi, 0.1, servo_contr, cl)
 reg.set_ref(0, 0, 0)
 
-lock = threading.Lock()
-
-reg.runMethod(lock)
-
+reg.runMethod()
 
 
 
