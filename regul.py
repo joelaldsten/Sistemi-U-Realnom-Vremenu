@@ -46,8 +46,8 @@ class Regul:
             
             ph = self.phidot(v, angle)
             for i in range(len(ph)):
-                ph[i] = round(self.limit_v(ph[i]))
-            ph.astype(np.int64)
+                ph[i] = self.limit_v(ph[i])
+            ph = ph.astype(np.int64)
             print("theta: ", ph[2])
             print(type(ph[0]))
 
