@@ -24,10 +24,10 @@ class Regul:
             return -1023
         return round(v)
     
-    def set_ref(self,x,y,theta):
+    def set_ref(self,x,y):
         self._x_ref = x
         self._y_ref = y 
-        self._theta_ref = theta #?
+        self._theta_ref = self._crazy_logger.theta() #?
 
     def phidot(self,xdot,ang):
         M = -1/self._r*np.array([[-np.sin(ang), np.cos(ang), self._R ],[-np.sin(ang+self._a1), np.cos(ang+self._a1), self._R],[-np.sin(ang+self._a2), np.cos(ang+self._a2), self._R]])
