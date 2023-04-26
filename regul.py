@@ -2,7 +2,6 @@ import threading
 import time
 import numpy as np
 
-#lock = threading.Lock()
 class Regul:
     def __init__(self, PI, h, servo_controller, crazy_logger):
         self._PI = PI
@@ -48,6 +47,7 @@ class Regul:
             ph = self.phidot(v, angle)
             for i in range(len(ph)):
                 ph[i] = self.limit_v(ph[i])
+            print("theta: ", ph[2])
 
             #Output the controlsignals
             self._servo_controller.actuate(ph[0], ph[1], ph[2])
