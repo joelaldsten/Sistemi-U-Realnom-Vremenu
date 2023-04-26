@@ -1,6 +1,7 @@
 import socket
-
-s = socket.create_server(("127.0.0.69", 80))
+import subprocess
+subprocess.call(['sh', './duck.sh'])
+s = socket.create_server(("", 55555))
 s.listen()
 conn, addr = s.accept()
 while True:
