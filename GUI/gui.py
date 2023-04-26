@@ -51,7 +51,7 @@ class GUI:
         print(f"Marked point at ({x}, {y})")"""
 
         x, y = event.x, event.y
-        Thread(self.send_data, args=("{}|{}|".format(x,y)).run())
+        Thread(self.send_data, args=("{}|{}|".format(x,y))).run()
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
         self.points.append((x, y))
 
@@ -145,7 +145,7 @@ class GUI:
             ## Error message ##
             self.error_label = tk.Label(self.parameters_frame, bg='white', text="")
             self.error_label.place(relx=0.2, rely=0.8)
-            Thread(self.send_data, args = ("PID " + ', '.join(self.params)).run()).run
+            Thread(self.send_data, args = ("PID " + ', '.join(self.params))).run
             pass
         elif option == "Kalman":
             self.parameters_label = tk.Label(self.parameters_frame, text="Choose controller parameters")
