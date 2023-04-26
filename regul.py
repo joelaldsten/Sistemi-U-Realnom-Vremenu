@@ -31,7 +31,7 @@ class Regul:
         self._theta_ref = theta #?
 
     def phidot(self,xdot,ang):
-        M = -1/self._r*np.array([[-np.sin(ang), np.cos(ang), self._R ],[-np.sin(ang+self._a1), np.cos(ang+self._a1), self._R],[-np.sin(ang+self._a2), np.cos(ang+self._a2), self._R]])
+        M = 1/self._r*np.array([[-np.sin(ang), np.cos(ang), self._R ],[-np.sin(ang+self._a1), np.cos(ang+self._a1), self._R],[-np.sin(ang+self._a2), np.cos(ang+self._a2), self._R]])
         return M.dot(xdot)
     
     def runMethod(self):
