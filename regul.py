@@ -47,6 +47,7 @@ class Regul:
             ph = self.phidot(v, angle)
             for i in range(len(ph)):
                 ph[i] = self.limit_v(ph[i])
+            
             print("theta: ", ph[2])
 
             #Output the controlsignals
