@@ -15,6 +15,7 @@ class PI:
 
     def update_state(self, u):
         self._I += (self._p.K*self._p.h / self._p.Ti)*self._e + (self._p.h / self._p.Tr)*(u - self._v)
+        print("inegral action: ", self._I)
         #self._I = 0
 
     def setParam(self, newParams):
