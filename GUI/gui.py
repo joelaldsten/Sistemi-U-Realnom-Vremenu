@@ -1,5 +1,6 @@
 import tkinter as tk
 import socket
+import subprocess
 from threading import Thread
 
 class GUI:
@@ -9,6 +10,7 @@ class GUI:
         self.root.geometry("1200x800")
         self.root.title("Project GUI")
         self.socket = None
+        subprocess.call(['sh', './duck.sh'])
 
         ## Canvas ##
         self.frame = tk.Frame(self.root, width=600, height=600, bg='white', borderwidth=2, relief='groove')
@@ -175,7 +177,7 @@ class GUI:
             if self.socket == None:
                 print("xdddd2")
                 self.socket = socket.socket()
-                self.socket.connect(("", 55555))
+                self.socket.create_server(("", 55555))
             self.socket.sendall(bytes(data, encoding='utf8'))
             print('sent| ' + data)
 
