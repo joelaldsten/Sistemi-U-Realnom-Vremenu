@@ -9,7 +9,6 @@ class GUI:
         self.root = tk.Tk()
         self.root.geometry("1200x800")
         self.root.title("Project GUI")
-        self.socket = None
         subprocess.call(['sh', './duck.sh'])
 
         ## Canvas ##
@@ -38,6 +37,13 @@ class GUI:
         self.option_var.set("Controller Menu")
         self.option_menu = tk.OptionMenu(self.root, self.option_var, "PID", "Kalman", "MPC", command=self.update_gui)
         self.option_menu.place(relx=0.6, rely=0.05)
+
+        print("Created socket")
+        s = socket.create_server(("", 55555))
+        s.listen()
+        print("Listening")
+        self.socket, addr = s.accept()
+        print("Accepted")
 
     def get_parameters(self):
         return self.params
@@ -173,13 +179,6 @@ class GUI:
             pass 
 
     def send_data(self, data):
-            print("xdddd1")
-            if self.socket == None:
-                s = socket.create_server(("", 55555))
-                s.listen()
-                conn, addr = s.accept()
-                print("conectio vbdsaivb")
-                self.socket = conn
             self.socket.sendall(bytes(data, encoding='ASCII'))
             print('sent| ' + data)
 
