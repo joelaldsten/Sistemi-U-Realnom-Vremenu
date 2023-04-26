@@ -49,7 +49,7 @@ class Regul:
                 ph[i] = round(self.limit_v(ph[i]))
             
             #print("theta: ", ph[2])
-            print(ph)
+            print(ph[0])
 
             #Output the controlsignals
 
