@@ -175,7 +175,7 @@ class GUI:
             if self.socket == None:
                 print("xdddd2")
                 self.socket = socket.socket()
-                self.socket.connect(("kanelbulle.duckdns.org", 55555))
+                self.socket.connect(("", 55555))
             self.socket.sendall(bytes(data, encoding='utf8'))
             print('sent| ' + data)
 
