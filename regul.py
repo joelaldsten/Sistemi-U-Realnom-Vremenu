@@ -48,10 +48,11 @@ class Regul:
             for i in range(len(ph)):
                 ph[i] = self.limit_v(ph[i])
             
-            print("theta: ", ph[2])
+            #print("theta: ", ph[2])
+            print(ph)
 
             #Output the controlsignals
-            
+
             #self._servo_controller.actuate(ph[0], ph[1], ph[2])
 
             #Update states
