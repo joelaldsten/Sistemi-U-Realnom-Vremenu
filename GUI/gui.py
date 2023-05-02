@@ -9,7 +9,6 @@ class GUI:
         self.root = tk.Tk()
         self.root.geometry("1200x800")
         self.root.title("Project GUI")
-        subprocess.call(['sh', './duck.sh'])
 
         ## Canvas ##
         self.frame = tk.Frame(self.root, width=600, height=600, bg='white', borderwidth=2, relief='groove')
@@ -147,13 +146,13 @@ class GUI:
             self.tr_text.place(relx=0.4, rely=0.5)
 
             ## Apply parameters button ##
-            self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: self.get_input([self.k_text, self.ti_text, self.h_text, self.beta_text, self.tr_text]))
+            self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: Thread(target = self.update_params, kwargs ={"controller" : "PID"}).start())
             self.configuration_button.place(relx=0.2, rely=0.9)
             
             ## Error message ##
             self.error_label = tk.Label(self.parameters_frame, bg='white', text="")
             self.error_label.place(relx=0.2, rely=0.8)
-            Thread(target = self.send_data, kwargs ={"data" : ("PID " + ', '.join(self.params))}).start()
+            #Thread(target = self.update_params, kwargs ={"Controller" : ("PID")}).start()
             pass
         elif option == "Kalman":
             self.parameters_label = tk.Label(self.parameters_frame, text="Choose controller parameters")
@@ -178,9 +177,14 @@ class GUI:
 
             pass 
 
+    def update_params(self, controller):
+        self.get_input([self.k_text, self.ti_text, self.h_text, self.beta_text, self.tr_text])
+        if controller == "PID":
+            self.send_data("PID: " + ', '.join([str(x) for x in self.params]))
+
     def send_data(self, data):
-            self.socket.sendall(bytes(data, encoding='ASCII'))
-            print('sent| ' + data)
+        self.socket.sendall(bytes(data, encoding='utf-8'))
+        print('sent| ' + data)
 
     def run(self):
         self.root.mainloop() 
