@@ -16,7 +16,7 @@ class Regul:
         self._a1 = 2*np.pi/3 	# Angle between x axis and first wheel
         self._a2 = 4*np.pi/3  # Angle between x axis and second wheel
         self._r = 0.028*0.45/18 # Wheel radius. Has been fudge-factored because the actual velocity of the wheels did not align with the set-points.
-        self._distance_min = 0.05
+        self._distance_min = 0.1
     
     def limit_v(self,v):
         if v > 1023:
