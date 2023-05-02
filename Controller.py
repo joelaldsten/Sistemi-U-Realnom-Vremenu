@@ -170,7 +170,9 @@ pi = PI(piParam)
 
 reg = Regul(pi, 0.1, servo_contr, cl)
 reg.set_ref(0, 0)
-reg.set_ref(0.5, 0.5)
+reg.set_ref(-1, -1)
+reg.set_ref(-0.5, -0.5)
+
 
 
 
