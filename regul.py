@@ -16,6 +16,7 @@ class Regul:
         self._a1 = 2*np.pi/3 	# Angle between x axis and first wheel
         self._a2 = 4*np.pi/3  # Angle between x axis and second wheel
         self._r = 0.028*0.45/18 # Wheel radius. Has been fudge-factored because the actual velocity of the wheels did not align with the set-points.
+        self._distance_min = 0.05
     
     def limit_v(self,v):
         if v > 1023:
@@ -24,10 +25,13 @@ class Regul:
             return -1023
         return round(v)
     
+    
+    
     def set_ref(self,x,y):
         self._x_ref = x
         self._y_ref = y 
         self._theta_ref = self._crazy_logger.theta() #?
+        self.runMethod()
 
     def phidot(self,xdot,ang):
         M = -1/self._r*np.array([[-np.sin(ang), np.cos(ang), self._R ],[-np.sin(ang+self._a1), np.cos(ang+self._a1), self._R],[-np.sin(ang+self._a2), np.cos(ang+self._a2), self._R]])
@@ -56,6 +60,9 @@ class Regul:
 
             #Update states
             self._PI.update_state(v)
+            d = np.sqrt((self._x_ref - self._crazy_logger.x())^2 + (self._y_ref - self._crazy_logger.y())^2)
+            if d < self._distance_min:
+                return 
 
             t1 = time.time()
             calc_time = t1 - t
