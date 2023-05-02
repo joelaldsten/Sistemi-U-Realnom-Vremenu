@@ -60,7 +60,7 @@ class Regul:
 
             #Update states
             self._PI.update_state(v)
-            d = np.sqrt((self._x_ref - self._crazy_logger.x())^2 + (self._y_ref - self._crazy_logger.y())^2)
+            d = np.sqrt(np.power(self._x_ref - self._crazy_logger.x(), 2) + np.power(self._y_ref - self._crazy_logger.y(),2))
             if d < self._distance_min:
                 return 
 
