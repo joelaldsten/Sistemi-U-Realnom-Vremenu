@@ -7,7 +7,7 @@ class PI:
         self._I = 0
         self._v = 0
         self._e = np.zeros(3)
-        self._extra_K = np.array([1,1,0.75])
+        self._extra_K = np.array([1,1,2])
     
     def calculate_output(self, e):
         self._e = e
