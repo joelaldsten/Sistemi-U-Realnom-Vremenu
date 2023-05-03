@@ -37,12 +37,12 @@ class GUI:
         self.option_menu = tk.OptionMenu(self.root, self.option_var, "PID", "Kalman", "MPC", command=self.update_gui)
         self.option_menu.place(relx=0.6, rely=0.05)
 
-        print("Created socket")
-        s = socket.create_server(("", 55555))
-        s.listen()
-        print("Listening")
-        self.socket, addr = s.accept()
-        print("Accepted")
+        # print("Created socket")
+        # s = socket.create_server(("", 55555))
+        # s.listen()
+        # print("Listening")
+        # self.socket, addr = s.accept()
+        # print("Accepted")
 
     def get_parameters(self):
         return self.params
@@ -50,6 +50,69 @@ class GUI:
     # Get reference points
     def get_ref_points(self):
         return self.points
+    
+    def transform_coords(self, gui_coords):
+        x_gui = gui_coords[0]
+        y_gui = gui_coords[1]
+
+        scaling_x = x_gui/600
+        scaling_y = y_gui/600
+
+        # Predetermined points
+        A = [-0.9,0.9]
+        B = [1.34059,0.03992]
+        C = [-1.76008,-1.34059]
+        D = [0.48051,-2.20068]
+
+        # Predetermined slopes for basis vectors
+        k_n = 2.60509
+        k_p = -0.38387
+
+        # Find points x_m, y_m on line CD, corresponding to scaling_x fractions of the line towards D
+        # Call this point E
+        x_m = C[0]*(1-scaling_x ) + D[0]*scaling_x
+        y_m = C[1]*(1-scaling_x) + D[1]*scaling_x
+        E = [x_m,y_m]
+
+        # Find points x_m2, y_m2 on line CA, corresponding to scaling_y fractions of the line towards A
+        # Call this point F
+        x_m2 = C[0]*scaling_y + A[0]*(1-scaling_y)
+        y_m2 = C[1]*scaling_y + A[1]*(1-scaling_y)
+        F = [x_m2,y_m2]
+        #print(f"E: ({E}), F: ({F})")
+
+
+        # Find linear equations y_e and y_f
+        # y_e is the line being perpendicular to the line CD (parallel to CA) going through E
+        # y_f is the line being perpendicular to the line CA (parallel to CD) going through F
+
+        k_e = k_n
+        left_side = E[1]
+        right_side = k_e * E[0]
+        m_e = left_side - right_side
+        #print(f"y_e = k_e*x + m_e = {k_e}*x + {m_e}")
+
+        k_f = k_p
+        left_side = F[1]
+        right_side = k_f * F[0]
+        m_f = left_side - right_side
+        #print(f"y_f = k_f*x + m_f = {k_f}*x + {m_f}")
+
+        # Find intersection between y_e and y_f, y_f = y_e
+        #print(f"k_f = {k_f}, k_e = {k_e}")
+        #print(f"y_f = y_e <=> {k_f}x + {m_f} = {k_e}x + {m_e}")
+
+        # Move x to left side
+        left = k_f - k_e
+        # Move constants to right side
+        right = m_e - m_f
+
+        #print(f"Equation to solve for x: {left}x = {right}")
+        x = right/left
+        y = k_e*x + m_e
+
+        #print(f"x = {x}, y = {y}")
+        return [x,y]
 
     def mark_point(self, event, robot_x=None, robot_y=None):
         """x, y = event.x, event.y
@@ -63,6 +126,11 @@ class GUI:
         self.points.append((x, y))
 
         print(f"Robot at ({x}, {y})")
+
+        # Transform coordinates
+        new_coords = self.transform_coords([x,y])
+        x = new_coords[0]
+        y = new_coords[1]
 
         self.coord_text.delete("1.0", tk.END)
         self.coord_text.insert(tk.END, f"({x}, {y})\n")
