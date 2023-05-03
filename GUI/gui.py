@@ -123,14 +123,15 @@ class GUI:
         x, y = event.x, event.y
         Thread(target = self.send_data, kwargs ={"data" : ("{}|{}|".format(x,y))}).start()
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
-        self.points.append((x, y))
-
-        print(f"Robot at ({x}, {y})")
 
         # Transform coordinates
         new_coords = self.transform_coords([x,y])
         x = new_coords[0]
         y = new_coords[1]
+        
+        self.points.append((x, y))
+
+        print(f"Robot at ({x}, {y})")
 
         self.coord_text.delete("1.0", tk.END)
         self.coord_text.insert(tk.END, f"({x}, {y})\n")
