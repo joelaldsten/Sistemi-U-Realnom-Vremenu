@@ -185,16 +185,16 @@ uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie 
 cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
 
-servo_contr.actuate(100,100,100)
-time.sleep(1)
-servo_contr.actuate(np.int64(-105), np.int64(701), np.int64(-595))
-time.sleep(1)
-servo_contr.actuate(0,0,0)
-#q = queue.Queue()
-#pi = PI(PIParameters(1.25,5,0.005,0.6,50))
-#reg = Regul(q, pi, 0.1, servo_contr, cl)
-#Thread(target=start_com, args=(q, reg)).start()
-#reg.runMethod()
+#servo_contr.actuate(100,100,100)
+#time.sleep(1)
+#servo_contr.actuate(np.int64(-105), np.int64(701), np.int64(-595))
+#time.sleep(1)
+#servo_contr.actuate(0,0,0)
+q = queue.Queue()
+pi = PI(PIParameters(1.25,5,0.005,0.6,50))
+reg = Regul(q, pi, 0.1, servo_contr, cl)
+Thread(target=start_com, args=(q, reg)).start()
+reg.runMethod()
 
 
 

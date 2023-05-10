@@ -68,7 +68,7 @@ class Regul:
             #Output the controlsignals
             print(type(ph[0]),type(ph[1]),type(ph[2]))
             print(ph[0], ph[1], ph[2])
-            self._servo_controller.actuate(ph[0], ph[1], ph[2])
+            self._servo_controller.actuate(ph[0].item(), ph[1].item(), ph[2].item())
 
             #Update states
             self._PI.update_state(v)
@@ -84,9 +84,3 @@ class Regul:
             sleep_time = self._h - calc_time
             if sleep_time < 0: sleep_time = 0
             time.sleep(sleep_time)
-
-
-
-            
-    
-
