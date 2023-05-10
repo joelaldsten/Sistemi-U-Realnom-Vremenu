@@ -159,16 +159,23 @@ class CrazyLogger:
     def close(self):
         self._cf.close_link()
     
-def start_com():
+def start_com(q, reg):
     s = socket.socket()
-    s.connect(("192.168.0.102", 55555))
+    s.connect(("192.168.0.105", 55555))
     print("Connected")
     while True:
-        data = s.recv(1024)
+        data = s.recv(1024).decode("utf-8")
+        if data.startswith("PID"):
+            data = data.split(" ")
+            reg.update_params(PIParameters(float(data[0]),float(data[1]),float(data[2]),float(data[3]),float(data[4])))
+            print("updated params")
+        elif data.startswith("POS"):
+            q.put(((float(data.split("|")[1]), float(data.split("|")[2]))))
+            print('Received x = {}, y = {}\n'.format(data.split("|")[1], data.split("|")[2]))
+        else:
+            print("Received unknown data")
         if not data:
-            print("Connection closed")
             break
-        print('Received \n', data.decode("utf-8"))  #Update new points and paramas need to make it thread safe..
       
 
 servo_contr = Servo_controller()
@@ -178,16 +185,10 @@ cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
 
 q = queue.Queue()
-Thread(target=start_com).start()
-
-piParam = PIParameters(1.25,5,0.005,0.6,50)
-
-pi = PI(piParam)
-
-reg = Regul(pi, 0.1, servo_contr, cl)
-reg.set_ref(0, 0)
-reg.set_ref(-1, -1)
-reg.set_ref(-0.5, -0.5)
+pi = PI(PIParameters(1.25,5,0.005,0.6,50))
+reg = Regul(q, pi, 0.1, servo_contr, cl)
+Thread(target=start_com, args=(q, reg)).start()
+reg.runMethod()
 
 
 

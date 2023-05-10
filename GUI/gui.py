@@ -37,12 +37,12 @@ class GUI:
         self.option_menu = tk.OptionMenu(self.root, self.option_var, "PID", "Kalman", "MPC", command=self.update_gui)
         self.option_menu.place(relx=0.6, rely=0.05)
 
-        # print("Created socket")
-        # s = socket.create_server(("", 55555))
-        # s.listen()
-        # print("Listening")
-        # self.socket, addr = s.accept()
-        # print("Accepted")
+        print("Created socket")
+        s = socket.create_server(("", 55555))
+        s.listen()
+        print("Listening")
+        self.socket, addr = s.accept()
+        print("Accepted")
 
     def get_parameters(self):
         return self.params
@@ -121,13 +121,13 @@ class GUI:
         print(f"Marked point at ({x}, {y})")"""
 
         x, y = event.x, event.y
-        Thread(target = self.send_data, kwargs ={"data" : ("POS|{}|{}".format(x,y))}).start()
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
 
         # Transform coordinates
         new_coords = self.transform_coords([x,y])
         x = new_coords[0]
         y = new_coords[1]
+        Thread(target = self.send_data, kwargs ={"data" : ("POS|{}|{}".format(x,y))}).start()
         
         self.points.append((x, y))
 

@@ -1,9 +1,12 @@
 import threading
+import queue
 import time
 import numpy as np
 
 class Regul:
-    def __init__(self, PI, h, servo_controller, crazy_logger):
+    def __init__(self, q, PI, h, servo_controller, crazy_logger):
+        self.q = q
+        self.lock = threading.Lock()
         self._PI = PI
         self._h = h
         self._servo_controller = servo_controller
@@ -25,24 +28,32 @@ class Regul:
             return -1023
         return round(v)
     
-    
-    
-    def set_ref(self,x,y):
-        self._x_ref = x
-        self._y_ref = y 
-        self._theta_ref = self._crazy_logger.theta() #?
-        self.runMethod()
+    def set_ref(self,pos):
+        self._x_ref = pos[0]
+        self._y_ref = pos[1]
+        self._theta_ref = self._crazy_logger.theta()
+
+    def update_params(self, params):
+        self.lock.acquire()
+        self._PI.setParam(params)
+        self.lock.release()
+        
+        
 
     def phidot(self,xdot,ang):
         M = -1/self._r*np.array([[-np.sin(ang), np.cos(ang), self._R ],[-np.sin(ang+self._a1), np.cos(ang+self._a1), self._R],[-np.sin(ang+self._a2), np.cos(ang+self._a2), self._R]])
         return M.dot(xdot)
     
     def runMethod(self):
+        while self.q.empty():
+            time.sleep(0.5)
+        self.set_ref(self.q.get())
 
         while True:
             print("x:",self._crazy_logger.x(),"\t y:",self._crazy_logger.y(),"\t theta:",self._crazy_logger.theta())
             t = time.time()
             angle = self._crazy_logger.theta()
+            self.lock.acquire()
             e = np.array([self._x_ref - self._crazy_logger.x(), self._y_ref - self._crazy_logger.y(), self._theta_ref - angle])
             
             #Calculate output and limit it 
@@ -61,12 +72,16 @@ class Regul:
             #Update states
             self._PI.update_state(v)
             d = np.sqrt(np.power(self._x_ref - self._crazy_logger.x(), 2) + np.power(self._y_ref - self._crazy_logger.y(),2))
+            self.lock.release()
             if d < self._distance_min:
-                return 
+                while self.q.empty():
+                    time.sleep(0.5)
+                self.set_ref(self.q.get())
 
             t1 = time.time()
             calc_time = t1 - t
             sleep_time = self._h - calc_time
+            if sleep_time < 0: sleep_time = 0
             time.sleep(sleep_time)
 
 
