@@ -1,5 +1,6 @@
 import numpy as np
 import socket
+import queue
 from threading import Thread
 # Dynamixel packages
 from dynamixel.model.xm430_w210_t_r import XM430_W210_T_R
@@ -158,23 +159,26 @@ class CrazyLogger:
     def close(self):
         self._cf.close_link()
     
-    def start_com(self):
-        s = socket.socket()
-        s.connect(("192.168.0.102", 55555))
-        print("Connected")
-        while True:
-            data = s.recv(1024)
-            if not data:
-                print("Connection closed")
-                break
-            print('Received \n', data.decode("utf-8"))  #Update new points and paramas need to make it thread safe..
-          
+def start_com():
+    s = socket.socket()
+    s.connect(("192.168.0.102", 55555))
+    print("Connected")
+    while True:
+        data = s.recv(1024)
+        if not data:
+            print("Connection closed")
+            break
+        print('Received \n', data.decode("utf-8"))  #Update new points and paramas need to make it thread safe..
+      
 
 servo_contr = Servo_controller()
 cflib.crtp.init_drivers()                        # Initiate drivers for crazyflie
 uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie via USB
 cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
+
+q = queue.Queue()
+Thread(target=start_com).start()
 
 piParam = PIParameters(1.25,5,0.005,0.6,50)
 

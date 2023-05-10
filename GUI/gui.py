@@ -58,7 +58,7 @@ class GUI:
         print(f"Marked point at ({x}, {y})")"""
 
         x, y = event.x, event.y
-        Thread(target = self.send_data, kwargs ={"data" : ("{}|{}|".format(x,y))}).start()
+        Thread(target = self.send_data, kwargs ={"data" : ("POS|{}|{}".format(x,y))}).start()
         self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red")
         self.points.append((x, y))
 
@@ -180,7 +180,7 @@ class GUI:
     def update_params(self, controller):
         self.get_input([self.k_text, self.ti_text, self.h_text, self.beta_text, self.tr_text])
         if controller == "PID":
-            self.send_data("PID: " + ', '.join([str(x) for x in self.params]))
+            self.send_data("PID: " + ' '.join([str(x) for x in self.params]))
 
     def send_data(self, data):
         self.socket.sendall(bytes(data, encoding='utf-8'))
