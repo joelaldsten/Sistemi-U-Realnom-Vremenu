@@ -37,6 +37,7 @@ class Servo_controller:
             s.torque_enable.write(1)
 
     def actuate(self, s1, s2, s3):
+        print(s1," ", s2, " ", s3)
         self.servos[0].goal_velocity.write(s1)
         self.servos[1].goal_velocity.write(s2)
         self.servos[2].goal_velocity.write(s3)
