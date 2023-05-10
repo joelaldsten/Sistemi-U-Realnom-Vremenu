@@ -38,9 +38,18 @@ class Servo_controller:
 
     def actuate(self, s1, s2, s3):
         print(s1," ", s2, " ", s3)
-        self.servos[0].goal_velocity.write(s1)
-        self.servos[1].goal_velocity.write(s2)
-        self.servos[2].goal_velocity.write(s3)
+        try:
+            self.servos[0].goal_velocity.write(s1)
+            self.servos[1].goal_velocity.write(s2)
+            self.servos[2].goal_velocity.write(s3)
+        except:
+            for s in self.servos:
+                s.bus_watchdog.write(0) # Clear old watchdog error
+                s.bus_watchdog.write(100) # 2 second timeout
+                s.torque_enable.write(1)
+            self.servos[0].goal_velocity.write(s1)
+            self.servos[1].goal_velocity.write(s2)
+            self.servos[2].goal_velocity.write(s3)
         return None
 
 class CrazyLogger:
@@ -185,11 +194,11 @@ uri = uri_helper.uri_from_env(default='usb://0') # Connection-uri for crazyflie 
 cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
 
-#servo_contr.actuate(100,100,100)
-#time.sleep(1)
-#servo_contr.actuate(np.int64(-105), np.int64(701), np.int64(-595))
-#time.sleep(1)
-#servo_contr.actuate(0,0,0)
+servo_contr.actuate(100,100,100)
+time.sleep(1)
+servo_contr.actuate(-105, 700, -595)
+time.sleep(1)
+servo_contr.actuate(0,0,0)
 q = queue.Queue()
 pi = PI(PIParameters(1.25,5,0.005,0.6,50))
 reg = Regul(q, pi, 0.1, servo_contr, cl)
