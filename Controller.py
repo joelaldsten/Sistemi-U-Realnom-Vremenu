@@ -187,7 +187,7 @@ time.sleep(1) # Wait for connection to work
 
 servo_contr.actuate(100,100,100)
 time.sleep(1)
-servo_contr.actuate(-105, 701, -595)
+servo_contr.actuate(np.int64(-105), np.int64(701), np.int64(-595))
 time.sleep(1)
 servo_contr.actuate(0,0,0)
 #q = queue.Queue()
