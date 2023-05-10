@@ -188,7 +188,7 @@ time.sleep(1) # Wait for connection to work
 q = queue.Queue()
 pi = PI(PIParameters(1.25,5,0.005,0.6,50))
 reg = Regul(q, pi, 0.1, servo_contr, cl)
-q.add((0,0))
+q.put((0,0))
 #Thread(target=start_com, args=(q, reg)).start()
 reg.runMethod()
 
