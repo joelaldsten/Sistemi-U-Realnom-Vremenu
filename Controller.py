@@ -189,7 +189,7 @@ q = queue.Queue()
 pi = PI(PIParameters(1.25,5,0.005,0.6,50))
 reg = Regul(q, pi, 0.1, servo_contr, cl)
 Thread(target=start_com, args=(q, reg)).start()
-reg.runMethod()
+Thread(target = reg.runMethod()).start()
 
 
 
