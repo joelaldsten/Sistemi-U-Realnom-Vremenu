@@ -67,7 +67,8 @@ class Regul:
 
             #Output the controlsignals
 
-            self._servo_controller.actuate(ph[0], ph[1], ph[2])
+            #self._servo_controller.actuate(ph[0], ph[1], ph[2])
+            self._servo_controller.actuate(100, 100, 100)
 
             #Update states
             self._PI.update_state(v)
