@@ -166,16 +166,15 @@ def start_com(q, reg):
     print("Connected")
     while True:
         data = s.recv(1024).decode("utf-8")
-        print(data)
-        #if data.startswith("PID"):
-        #    data = data.split(" ")
-        #    reg.update_params(PIParameters(float(data[0]),float(data[1]),float(data[2]),float(data[3]),float(data[4])))
-        #    print("updated params")
-        #elif data.startswith("POS"):
-        #    q.put(((float(data.split("|")[1]), float(data.split("|")[2]))))
-        #    print('Received x = {}, y = {}\n'.format(data.split("|")[1], data.split("|")[2]))
-        #else:
-        #    print("Received unknown data")
+        if data.startswith("PID"):
+            data = data.split(" ")
+            reg.update_params(PIParameters(float(data[0]),float(data[1]),float(data[2]),float(data[3]),float(data[4])))
+            print("updated params")
+        elif data.startswith("POS"):
+            #q.put(((float(data.split("|")[1]), float(data.split("|")[2]))))
+            print('Received x = {}, y = {}\n'.format(data.split("|")[1], data.split("|")[2]))
+        else:
+            print("Received unknown data")
         if not data:
             break
       
