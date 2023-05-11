@@ -36,6 +36,7 @@ class Regul:
     def update_params(self, params):
         self.lock.acquire()
         self._PI.setParam(params)
+        self._h = self._PI._p.h
         self.lock.release()
         
         
