@@ -38,9 +38,18 @@ class Servo_controller:
 
     def actuate(self, s1, s2, s3):
         print(s1," ", s2, " ", s3)
-        self.servos[0].goal_velocity.write(s1)
-        self.servos[1].goal_velocity.write(s2)
-        self.servos[2].goal_velocity.write(s3)
+        try:
+            self.servos[0].goal_velocity.write(s1)
+            self.servos[1].goal_velocity.write(s2)
+            self.servos[2].goal_velocity.write(s3)
+        except:
+            for s in self.servos:
+                s.bus_watchdog.write(0) # Clear old watchdog error
+                s.bus_watchdog.write(100) # 2 second timeout
+                s.torque_enable.write(1)
+            self.servos[0].goal_velocity.write(s1)
+            self.servos[1].goal_velocity.write(s2)
+            self.servos[2].goal_velocity.write(s3)
         return None
 
 class CrazyLogger:

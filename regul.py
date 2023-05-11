@@ -67,7 +67,6 @@ class Regul:
             
 
             #Output the controlsignals
-
             self._servo_controller.actuate(ph[0], ph[1], ph[2])
 
             #Update states
@@ -84,9 +83,3 @@ class Regul:
             sleep_time = self._h - calc_time
             if sleep_time < 0: sleep_time = 0
             time.sleep(sleep_time)
-
-
-
-            
-    
-
