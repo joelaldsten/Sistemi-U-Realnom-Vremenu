@@ -38,8 +38,6 @@ class Regul:
         self._PI.setParam(params)
         self._h = self._PI._p.h
         self.lock.release()
-        
-        
 
     def phidot(self,xdot,ang):
         M = -1/self._r*np.array([[-np.sin(ang), np.cos(ang), self._R ],[-np.sin(ang+self._a1), np.cos(ang+self._a1), self._R],[-np.sin(ang+self._a2), np.cos(ang+self._a2), self._R]])
