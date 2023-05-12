@@ -228,7 +228,8 @@ class GUI:
         self.send_data("STOP")
         print("STOP")
 
-    def get_robot_position_loop(self, period):
+    def get_robot_position_loop(self):
+        period = 0.2
         while True:
             t = time.time()
             self.send_data("GETPOS")
@@ -242,5 +243,5 @@ class GUI:
             time.sleep(sleep_time)
 
     def run(self):
-        Thread(target = self.get_robot_position_loop, args=(0.2)).start()
+        Thread(target = self.get_robot_position_loop).start()
         self.root.mainloop()
