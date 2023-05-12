@@ -3,10 +3,28 @@ import socket
 import subprocess
 import time
 from threading import Thread
+import numpy as np
+
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 class GUI:
     params = []
     def __init__(self):
+        self.fig = plt.figure(figsize=(6,3))
+        self.x = np.zeros(100)
+        self.y = np.zeros(100)
+        self.theta = np.zeros(100)
+        self.t = np.arange(0,100)
+        self.one = np.ones(100)
+
+        self.xplot, = plt.plot(self.t, self.x, '-')
+        self.plt.axis([self.t[0], self.t[len(self.t)], -3, 3])
+        self.xplot.set_data(self.t,self.x)
+    
+        # lny, = plt.plot(self.t, self.y, '-')
+        # lntheta, = plt.plot(self.t, self.theta, '-')
+
         self.root = tk.Tk()
         self.root.geometry("1200x800")
         self.root.title("Project GUI")
@@ -230,11 +248,17 @@ class GUI:
 
     def get_robot_position_loop(self):
         period = 0.2
+        plt.show()
         while True:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
-            print(pos)
+            self.x = np.concatenate((self.x[1:100],np.array(pos[0])))
+            self.plt.axis([self.t[0], self.t[len(self.t)], -3, 3])
+            self.xplot.set_data(self.t,self.x)
+
+            self.t = self.t + self.one
+
             #printa x (pos[0]) och y (pos[1]) till gui
             #Vet inte hur time funkar är det sekunder? just nu användas 0.2 som period för 5hz.
             t1 = time.time()
@@ -246,3 +270,6 @@ class GUI:
     def run(self):
         Thread(target = self.get_robot_position_loop).start()
         self.root.mainloop()
+
+    def update(frame):
+        return
