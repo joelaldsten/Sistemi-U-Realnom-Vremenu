@@ -32,11 +32,17 @@ class GUI:
         self.canvas.bind("<Button-1>", self.mark_point)
         self.points = []
 
-        self.coord_label = tk.Label(self.root, text="Robot Position:")
+        self.coord_label = tk.Label(self.root, text="Reference point:")
         self.coord_label.place(relx=0.05, rely=0.05)
 
         self.coord_text = tk.Text(self.root, width=30, height=2)
         self.coord_text.place(relx=0.2, rely=0.05)
+
+        self.pos_label = tk.Label(self.root, text="Robot position:")
+        self.pos_label.place(relx=0.5, rely=0.05)
+
+        self.pos_text = tk.Text(self.root, width=30, height=2)
+        self.pos_text.place(relx=0.65, rely=0.05)
 
         self.robot_lines = []
 
@@ -137,7 +143,7 @@ class GUI:
         print(f"Robot at ({x}, {y})")
 
         self.coord_text.delete("1.0", tk.END)
-        self.coord_text.insert(tk.END, f"({x}, {y})\n")
+        self.coord_text.insert(tk.END, f"({round(x,2)}, {round(y,2)})\n")
 
         if robot_x is not None and robot_y is not None:
             last_x, last_y = self.points[-1]
@@ -240,6 +246,9 @@ class GUI:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
+
+            self.pos_text.delete("1.0", tk.END)
+            self.pos_text.insert(tk.END, f"({round(pos[0],2)}, {round(pos[1],2)})\n")
             #printa x (pos[0]) och y (pos[1]) till gui
             #Vet inte hur time funkar är det sekunder? just nu användas 0.2 som period för 5hz.
             t1 = time.time()
