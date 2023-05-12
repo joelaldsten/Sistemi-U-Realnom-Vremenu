@@ -169,6 +169,7 @@ class CrazyLogger:
     def close(self):
         self._cf.close_link()
 
+
 def start_com(q, reg, cl):
     s = socket.socket()
     s.connect(("192.168.0.110", 55555))
@@ -176,7 +177,8 @@ def start_com(q, reg, cl):
     while True:
         data = s.recv(1024).decode("utf-8")
         if data == "GETPOS":
-            s.sendall(bytes("{}|{}".format(cl.x(), cl.y()), encoding='utf-8'))
+            s.sendall(bytes("{}|{}|{}".format(cl.x(), cl.y(), cl.theta()), encoding='utf-8'))
+            print("Recived get position")
         elif data.startswith("PID"):
             data = data.split(" ")
             print(data)
