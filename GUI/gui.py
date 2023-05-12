@@ -218,6 +218,10 @@ class GUI:
             self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: Thread(target = self.update_params, kwargs ={"controller" : "PID"}).start())
             self.configuration_button.place(relx=0.2, rely=0.9)
             
+            ## Stop button ##
+            self.stop_button = tk.Button(self.parameters_frame, text="Stop", command= lambda: Thread(target = self.send_stop).start())
+            self.stop_button.place(relx=0.4, rely=0.9)
+
             ## Error message ##
             self.error_label = tk.Label(self.parameters_frame, bg='white', text="")
             self.error_label.place(relx=0.2, rely=0.8)
