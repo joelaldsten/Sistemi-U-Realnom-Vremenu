@@ -287,7 +287,7 @@ class GUI:
 
     def run(self):
         Thread(target = self.get_robot_position_loop).start()
-        ani = FuncAnimation(self.fig, self.update, interval=100)
+        ani = FuncAnimation(self.fig, self.update, interval=500)
         plt.show()
         self.root.mainloop()
 
