@@ -79,11 +79,14 @@ class Regul:
             self.lock.release()
             if d < self._distance_min or self._shouldStop:
                 if self._shouldStop:
-                    self.q.clear()
+                    while not self.q.empty():
+                        self.q.get()
                     self._shouldStop = False
                 while self.q.empty():
                     time.sleep(0.5)
                 self.set_ref(self.q.get())
+                self._PI._I = 0
+                self._PI._v = 0
 
             t1 = time.time()
             calc_time = t1 - t
