@@ -177,6 +177,7 @@ def start_com(q, reg):
         data = s.recv(1024).decode("utf-8")
         if data.startswith("PID"):
             data = data.split(" ")
+            print(data)
             reg.update_params(PIParameters(float(data[0]),float(data[1]),float(data[2]),float(data[3]),float(data[4])))
             print("updated params")
         elif data.startswith("POS"):
