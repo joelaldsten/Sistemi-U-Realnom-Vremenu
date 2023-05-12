@@ -19,10 +19,11 @@ class GUI:
         self.one = np.ones(100)
 
         self.xplot, = plt.plot(self.t, self.x, '-')
-        plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
         self.xplot.set_data(self.t,self.x)
     
-        yplot, = plt.plot(self.t, self.y, '-')
+        plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
+        
+        self.yplot, = plt.plot(self.t, self.y, '-')
         self.yplot.set_data(self.t,self.y)
         # lntheta, = plt.plot(self.t, self.theta, '-')
 
