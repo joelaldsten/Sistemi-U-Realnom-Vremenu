@@ -260,7 +260,7 @@ class GUI:
         print('sent| ' + data)
 
     def send_stop(self):
-        self.socket.send_data("STOP")
+        self.send_data("STOP")
         print("STOP")
 
     def run(self):
