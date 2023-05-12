@@ -19,7 +19,7 @@ class GUI:
         self.one = np.ones(100)
 
         self.xplot, = plt.plot(self.t, self.x, '-')
-        plt.axis([self.t[0], self.t[len(self.t)], -3, 3])
+        plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
         self.xplot.set_data(self.t,self.x)
     
         # lny, = plt.plot(self.t, self.y, '-')
