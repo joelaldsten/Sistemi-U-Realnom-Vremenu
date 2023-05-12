@@ -263,10 +263,10 @@ class GUI:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
-
+            print(pos)
             self.robotx = pos[0]
             self.roboty = pos[1]
-            self.robottheta = pos[2]
+            #self.robottheta = pos[2]
 
 
 
@@ -296,17 +296,17 @@ class GUI:
         self.x.append(self.robotx)
         self.y.popleft()
         self.y.append(self.roboty)
-        self.theta.popleft()
-        self.theta.append(self.robottheta)
+        # self.theta.popleft()
+        # self.theta.append(self.robottheta)
 
         self.xplot.cla()
         self.yplot.cla()
-        self.thetaplot.cla()
+        # self.thetaplot.cla()
 
         self.xplot.plot(self.x)
         self.xplot.set_ylim(-3,3)
         self.yplot.plot(self.y)
         self.yplot.set_ylim(-3,3)
-        self.thetaplot.plot(self.theta)
-        self.thetaplot.set_ylim(-4,4)
+        # self.thetaplot.plot(self.theta)
+        # self.thetaplot.set_ylim(-4,4)
 
