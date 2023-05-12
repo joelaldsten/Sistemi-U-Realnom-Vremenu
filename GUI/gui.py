@@ -254,6 +254,7 @@ class GUI:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
+            print(pos)
             self.x = np.concatenate((self.x[1:100],np.array(pos[0])))
             self.t = self.t + self.one
             plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
