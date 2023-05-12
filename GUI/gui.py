@@ -3,6 +3,7 @@ import socket
 import subprocess
 import time
 from threading import Thread
+import collections
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -12,19 +13,27 @@ class GUI:
     params = []
     def __init__(self):
         self.fig = plt.figure(figsize=(6,3))
-        self.x = np.zeros(100)
-        self.y = np.zeros(100)
-        self.theta = np.zeros(100)
-        self.t = np.arange(0,100)
+        self.x = collections.deque(np.zeros(100))
+        self.y = collections.deque(np.zeros(100))
+        self.theta = collections.deque(np.zeros(100))
+        self.t = collections.deque(np.arange(0,100))
         self.one = np.ones(100)
 
-        self.xplot, = plt.plot(self.t, self.x, '-')
-        self.xplot.set_data(self.t,self.x)
+        self.robotx = 0
+        self.roboty = 0
+        self.robottheta = 0
+
+        self.xplot = plt.subplot(311)
+        self.yplot = plt.subplot(312)
+        self.thetaplot = plt.subplot(313)
+
+        # self.xplot, = plt.plot(self.t, self.x, '-')
+        # self.xplot.set_data(self.t,self.x)
     
-        plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
+        # plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
         
-        self.yplot, = plt.plot(self.t, self.y, '-')
-        self.yplot.set_data(self.t,self.y)
+        # self.yplot, = plt.plot(self.t, self.y, '-')
+        # self.yplot.set_data(self.t,self.y)
         # lntheta, = plt.plot(self.t, self.theta, '-')
 
         self.root = tk.Tk()
@@ -254,11 +263,18 @@ class GUI:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
-            print(pos)
-            self.x = np.concatenate((self.x[1:100],np.array(pos[0])))
-            self.t = self.t + self.one
-            plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
-            self.xplot.set_data(self.t,self.x)
+
+            self.robotx = pos[0]
+            self.roboty = pos[1]
+            self.robottheta = pos[2]
+
+
+
+            # print(pos)
+            # self.x = np.concatenate((self.x[1:100],np.array(pos[0])))
+            # self.t = self.t + self.one
+            # plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
+            # self.xplot.set_data(self.t,self.x)
 
 
             #printa x (pos[0]) och y (pos[1]) till gui
@@ -271,8 +287,26 @@ class GUI:
 
     def run(self):
         Thread(target = self.get_robot_position_loop).start()
+        ani = FuncAnimation(self.fig, self.update, interval=100)
         plt.show()
         self.root.mainloop()
 
-    def update(frame):
-        return
+    def update(self, frame):
+        self.x.popleft()
+        self.x.append(self.robotx)
+        self.y.popleft()
+        self.y.append(self.roboty)
+        self.theta.popleft()
+        self.theta.append(self.robottheta)
+
+        self.xplot.cla()
+        self.yplot.cla()
+        self.thetaplot.cla()
+
+        self.xplot.plot(self.x)
+        self.xplot.set_ylim(-3,3)
+        self.yplot.plot(self.y)
+        self.yplot.set_ylim(-3,3)
+        self.thetaplot.plot(self.theta)
+        self.thetaplot.set_ylim(-4,4)
+
