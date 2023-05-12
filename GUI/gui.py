@@ -254,10 +254,10 @@ class GUI:
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
             self.x = np.concatenate((self.x[1:100],np.array(pos[0])))
-            self.plt.axis([self.t[0], self.t[len(self.t)], -3, 3])
+            self.t = self.t + self.one
+            plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
             self.xplot.set_data(self.t,self.x)
 
-            self.t = self.t + self.one
 
             #printa x (pos[0]) och y (pos[1]) till gui
             #Vet inte hur time funkar är det sekunder? just nu användas 0.2 som period för 5hz.
