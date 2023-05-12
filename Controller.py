@@ -203,7 +203,7 @@ cl = CrazyLogger(uri)
 time.sleep(1) # Wait for connection to work
 
 q = queue.Queue()
-pi = PI(PIParameters(1.25,15,0.01,0.8,50))
+pi = PI(PIParameters(1.75,15,0.01,0.8,50))
 reg = Regul(q, pi, 0.01, servo_contr, cl)
 Thread(target=start_com, args=(q, reg, cl)).start()
 reg.runMethod()

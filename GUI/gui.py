@@ -189,7 +189,7 @@ class GUI:
         self.k_label.place(relx=0.1, rely=0.1)
         self.k_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.k_text.place(relx=0.4, rely=0.1)
-        self.k_text.insert(tk.END, "1.25")
+        self.k_text.insert(tk.END, "1.75")
         ## Ti ##
         self.ti_label = tk.Label(self.parameters_frame, bg='white', text="Ti")
         self.ti_label.place(relx=0.1, rely=0.2)
