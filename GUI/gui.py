@@ -22,7 +22,8 @@ class GUI:
         plt.axis([self.t[0], self.t[len(self.t) - 1], -3, 3])
         self.xplot.set_data(self.t,self.x)
     
-        # lny, = plt.plot(self.t, self.y, '-')
+        yplot, = plt.plot(self.t, self.y, '-')
+        self.yplot.set_data(self.t,self.y)
         # lntheta, = plt.plot(self.t, self.theta, '-')
 
         self.root = tk.Tk()
