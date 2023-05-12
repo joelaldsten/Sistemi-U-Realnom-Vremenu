@@ -189,8 +189,8 @@ def start_com(q, reg):
         else:
             print("Received unknown data")
         if not data:
-            break
-      
+            print("no data")
+            break      
 
 servo_contr = Servo_controller()
 cflib.crtp.init_drivers()                        # Initiate drivers for crazyflie
@@ -204,36 +204,4 @@ reg = Regul(q, pi, 0.01, servo_contr, cl)
 Thread(target=start_com, args=(q, reg)).start()
 reg.runMethod()
 
-
-
-
-# print("Start pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(100):
-#     servo_contr.actuate(1023, 0, 0)
-#     time.sleep(0.1)
-# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(10):
-#     servo_contr.actuate(0, 0, 0)
-#     time.sleep(0.1)
-# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(100):
-#     servo_contr.actuate(600, 600, 0)
-#     time.sleep(0.1)
-# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(10):
-#     servo_contr.actuate(0, 0, 0)
-#     time.sleep(0.1)
-# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(100):
-#     servo_contr.actuate(0, 300, 300)
-#     time.sleep(0.1)
-# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(10):
-#     servo_contr.actuate(0, 0, 0)
-#     time.sleep(0.1)
-# print("x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
-# for i in range(100):
-#     servo_contr.actuate(1023,1023,1023)
-#     time.sleep(0.1)
-# print("End pos: x:",cl.x(),"\t y:",cl.y(),"\t theta:",cl.theta())
 cl.disconnect()
