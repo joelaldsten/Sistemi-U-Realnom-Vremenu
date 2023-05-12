@@ -234,6 +234,7 @@ class GUI:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
+            print(pos)
             #printa x (pos[0]) och y (pos[1]) till gui
             #Vet inte hur time funkar är det sekunder? just nu användas 0.2 som period för 5hz.
             t1 = time.time()
