@@ -1,6 +1,7 @@
 import tkinter as tk
 import socket
 import subprocess
+import time
 from threading import Thread
 
 class GUI:
@@ -42,11 +43,11 @@ class GUI:
 
     def get_parameters(self):
         return self.params
-    
+
     # Get reference points
     def get_ref_points(self):
         return self.points
-    
+
     def transform_coords(self, gui_coords):
         x_gui = gui_coords[0]
         y_gui = gui_coords[1]
@@ -124,7 +125,7 @@ class GUI:
         x = new_coords[0]
         y = new_coords[1]
         Thread(target = self.send_data, kwargs ={"data" : ("POS|{}|{}".format(x,y))}).start()
-        
+
         self.points.append((x, y))
 
         print(f"Robot at ({x}, {y})")
@@ -141,14 +142,14 @@ class GUI:
             start_x, start_y = self.points[-2]
             end_x, end_y = self.points[-1]
             line = self.canvas.create_line(start_x, start_y, end_x, end_y, fill="blue")
-            self.robot_lines.append(line)  
+            self.robot_lines.append(line)
 
     def isFloat(self, num):
         try:
             float(num)
             return True
         except ValueError:
-            return False        
+            return False
 
     def get_input(self, elems):
         self.params.clear()
@@ -159,13 +160,13 @@ class GUI:
             print(param)
             if self.isFloat(param):
                 self.params.append(float(param))
-                    
+
             else:
                 self.params.append(float(0))
-                self.error_label.config(text=f"Wrong format of input: '{param}'") 
+                self.error_label.config(text=f"Wrong format of input: '{param}'")
 
         print(self.params)
-    
+
 
     def show_parameters(self):
 
@@ -204,7 +205,7 @@ class GUI:
         ## Apply parameters button ##
         self.configuration_button = tk.Button(self.parameters_frame, text="Apply", command= lambda: Thread(target = self.update_params, kwargs ={"controller" : "PID"}).start())
         self.configuration_button.place(relx=0.2, rely=0.9)
-        
+
         ## Stop button ##
         self.stop_button = tk.Button(self.parameters_frame, text="Stop", command= lambda: Thread(target = self.send_stop).start())
         self.stop_button.place(relx=0.6, rely=0.9)
@@ -227,5 +228,19 @@ class GUI:
         self.send_data("STOP")
         print("STOP")
 
+    def get_robot_position_loop(self, period):
+        while True:
+            t = time.time()
+            self.send_data("GETPOS")
+            pos = self.socket.recv(1024).decode("utf-8").split("|")
+            #printa x (pos[0]) och y (pos[1]) till gui
+            #Vet inte hur time funkar är det sekunder? just nu användas 0.2 som period för 5hz.
+            t1 = time.time()
+            calc_time = t1 - t
+            sleep_time = period - calc_time
+            if sleep_time < 0: sleep_time = 0
+            time.sleep(sleep_time)
+
     def run(self):
-        self.root.mainloop() 
+        Thread(target = self.get_robot_position_loop, args=(0.2)).start()
+        self.root.mainloop()

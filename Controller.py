@@ -53,7 +53,7 @@ class Servo_controller:
         return None
 
 class CrazyLogger:
-    
+
     """
     Simple logging class that logs the Crazyflie Stabilizer from a supplied
     link uri.
@@ -92,7 +92,7 @@ class CrazyLogger:
         self._lg_stab.add_variable('stateEstimate.y', 'float')
         self._lg_stab.add_variable('stateEstimate.z', 'float')
         self._lg_stab.add_variable('stabilizer.yaw', 'float')
-        
+
         # The fetch-as argument can be set to FP16 to save space in the log packet
         #self._lg_stab.add_variable('pm.vbat', 'FP16')
 
@@ -140,42 +140,44 @@ class CrazyLogger:
         # Callback when the Crazyflie is disconnected (called in all cases)"""
         # print('Disconnected from %s' % link_uri)
         self.is_connected = False
-    
+
     def disconnect(self):
         self._cf.close_link()
-        
+
     def x(self):
 		# Return x-position of robot center
 		# Note that the offset of the crazyflie mount position is included
-        return self._state[0] - np.sin(np.deg2rad(self._state[3]))*self.position_offset 
-    
+        return self._state[0] - np.sin(np.deg2rad(self._state[3]))*self.position_offset
+
     def y(self):
 		# Return y-position of robot center
 		# Note that the offset of the crazyflie mount position is included
-        return self._state[1] + np.cos(np.deg2rad(self._state[3]))*self.position_offset 
-    
+        return self._state[1] + np.cos(np.deg2rad(self._state[3]))*self.position_offset
+
     def z(self):
 		# Return z-position of robot center
         return self._state[2]
-    
+
     def theta(self):
 		# Return direction of robot center, measured in radians between -pi and pi.
 		# Note that the offset of the crazyflie mount position is included
         return np.mod(self._state[3]*np.pi/180 + 11*np.pi/6,2*np.pi)-np.pi
-    
+
     def states(self):
         return self._state
-    
+
     def close(self):
         self._cf.close_link()
-    
-def start_com(q, reg):
+
+def start_com(q, reg, cl):
     s = socket.socket()
     s.connect(("192.168.0.110", 55555))
     print("Connected")
     while True:
         data = s.recv(1024).decode("utf-8")
-        if data.startswith("PID"):
+        if data == "GETPOS":
+            s.sendall(bytes("{}|{}".format(cl.x(), cl.y()), encoding='utf-8'))
+        elif data.startswith("PID"):
             data = data.split(" ")
             print(data)
             reg.update_params(PIParameters(float(data[1]),float(data[2]),float(data[3]),float(data[4]),float(data[5])))
@@ -190,7 +192,7 @@ def start_com(q, reg):
             print("Received unknown data")
         if not data:
             print("no data")
-            break      
+            break
 
 servo_contr = Servo_controller()
 cflib.crtp.init_drivers()                        # Initiate drivers for crazyflie
@@ -201,7 +203,7 @@ time.sleep(1) # Wait for connection to work
 q = queue.Queue()
 pi = PI(PIParameters(1.25,5,0.01,0.6,50))
 reg = Regul(q, pi, 0.01, servo_contr, cl)
-Thread(target=start_com, args=(q, reg)).start()
+Thread(target=start_com, args=(q, reg, cl)).start()
 reg.runMethod()
 
 cl.disconnect()
