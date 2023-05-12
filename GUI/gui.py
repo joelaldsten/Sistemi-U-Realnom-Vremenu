@@ -177,7 +177,7 @@ class GUI:
         self.k_label.place(relx=0.1, rely=0.1)
         self.k_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.k_text.place(relx=0.4, rely=0.1)
-        self.k_text.insert(tk.END, "1.25")
+        self.k_text.insert(tk.END, "1.5")
         ## Ti ##
         self.ti_label = tk.Label(self.parameters_frame, bg='white', text="Ti")
         self.ti_label.place(relx=0.1, rely=0.2)
@@ -195,7 +195,7 @@ class GUI:
         self.beta_label.place(relx=0.1, rely=0.4)
         self.beta_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.beta_text.place(relx=0.4, rely=0.4)
-        self.beta_text.insert(tk.END, "0.6")
+        self.beta_text.insert(tk.END, "0.8")
         ## Tr ##
         self.tr_label = tk.Label(self.parameters_frame, bg='white', text="Tr")
         self.tr_label.place(relx=0.1, rely=0.5)
