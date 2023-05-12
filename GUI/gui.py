@@ -255,5 +255,9 @@ class GUI:
         self.socket.sendall(bytes(data, encoding='utf-8'))
         print('sent| ' + data)
 
+    def send_stop(self):
+        self.socket.send_data("STOP")
+        print("STOP")
+
     def run(self):
         self.root.mainloop() 

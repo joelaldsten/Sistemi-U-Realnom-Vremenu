@@ -182,6 +182,9 @@ def start_com(q, reg):
         elif data.startswith("POS"):
             q.put(((float(data.split("|")[1]), float(data.split("|")[2]))))
             print('Received x = {}, y = {}\n'.format(data.split("|")[1], data.split("|")[2]))
+        elif data.startswith("STOP"):
+            reg.stopRunning()
+            print("Recived STOP")
         else:
             print("Received unknown data")
         if not data:

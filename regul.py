@@ -20,6 +20,7 @@ class Regul:
         self._a2 = 4*np.pi/3  # Angle between x axis and second wheel
         self._r = 0.028*0.45/18 # Wheel radius. Has been fudge-factored because the actual velocity of the wheels did not align with the set-points.
         self._distance_min = 0.1
+        self._shouldStop = False
     
     def limit_v(self,v):
         if v > 1023:
@@ -27,6 +28,11 @@ class Regul:
         elif v < -1023:
             return -1023
         return round(v)
+    
+    def stopRunning(self):
+        self.lock.acquire()
+        self._shouldStop = True
+        self.lock.release()
     
     def set_ref(self,pos):
         self._x_ref = pos[0]
@@ -71,7 +77,10 @@ class Regul:
             self._PI.update_state(v)
             d = np.sqrt(np.power(self._x_ref - self._crazy_logger.x(), 2) + np.power(self._y_ref - self._crazy_logger.y(),2))
             self.lock.release()
-            if d < self._distance_min:
+            if d < self._distance_min or self._shouldStop:
+                if self._shouldStop:
+                    self.q.clear()
+                    self._shouldStop = False
                 while self.q.empty():
                     time.sleep(0.5)
                 self.set_ref(self.q.get())
