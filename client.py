@@ -1,7 +1,7 @@
 import socket
 
 s = socket.socket()
-s.connect(("192.168.0.255", 55555))
+s.connect(("192.168.0.103", 55555))
 print("Connected")
 while True:
     data = s.recv(1024).decode("utf-8")
