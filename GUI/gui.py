@@ -248,7 +248,6 @@ class GUI:
 
     def get_robot_position_loop(self):
         period = 0.2
-        plt.show()
         while True:
             t = time.time()
             self.send_data("GETPOS")
@@ -269,6 +268,7 @@ class GUI:
 
     def run(self):
         Thread(target = self.get_robot_position_loop).start()
+        plt.show()
         self.root.mainloop()
 
     def update(frame):
