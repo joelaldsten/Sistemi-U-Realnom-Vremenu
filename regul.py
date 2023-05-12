@@ -62,9 +62,6 @@ class Regul:
             e = np.array([self._x_ref - self._crazy_logger.x(), self._y_ref - self._crazy_logger.y(), self._theta_ref - angle])
             
             # #Calculate output and limit it 
-            # v = self._PI.calculate_output(e)
-            
-            # ph = self.phidot(v, angle)
             ph = self.phidot(e, angle)
 
             v = self._PI.calculate_output(ph)
@@ -82,6 +79,7 @@ class Regul:
             d = np.sqrt(np.power(self._x_ref - self._crazy_logger.x(), 2) + np.power(self._y_ref - self._crazy_logger.y(),2))
             self.lock.release()
             if d < self._distance_min or self._shouldStop:
+                self._servo_controller.actuate(0, 0, 0)
                 if self._shouldStop:
                     while not self.q.empty():
                         self.q.get()
