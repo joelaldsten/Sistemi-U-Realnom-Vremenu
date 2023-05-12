@@ -61,17 +61,21 @@ class Regul:
             self.lock.acquire()
             e = np.array([self._x_ref - self._crazy_logger.x(), self._y_ref - self._crazy_logger.y(), self._theta_ref - angle])
             
-            #Calculate output and limit it 
-            v = self._PI.calculate_output(e)
+            # #Calculate output and limit it 
+            # v = self._PI.calculate_output(e)
             
-            ph = self.phidot(v, angle)
-            for i in range(len(ph)):
-                ph[i] = self.limit_v(ph[i])
-            ph = ph.astype(np.int64)
+            # ph = self.phidot(v, angle)
+            ph = self.phidot(e, angle)
+
+            v = self._PI.calculate_output(ph)
+
+            for i in range(len(v)):
+                v[i] = self.limit_v(v[i])
+            v = v.astype(np.int64)
             
 
             #Output the controlsignals
-            self._servo_controller.actuate(ph[0], ph[1], ph[2])
+            self._servo_controller.actuate(v[0], v[1], v[2])
 
             #Update states
             self._PI.update_state(v)
