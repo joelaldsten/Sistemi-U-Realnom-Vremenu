@@ -177,13 +177,13 @@ class GUI:
         self.k_label.place(relx=0.1, rely=0.1)
         self.k_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.k_text.place(relx=0.4, rely=0.1)
-        self.k_text.insert(tk.END, "1.5")
+        self.k_text.insert(tk.END, "1.25")
         ## Ti ##
         self.ti_label = tk.Label(self.parameters_frame, bg='white', text="Ti")
         self.ti_label.place(relx=0.1, rely=0.2)
         self.ti_text = tk.Text(self.parameters_frame, width=10, height=1)
         self.ti_text.place(relx=0.4, rely=0.2)
-        self.ti_text.insert(tk.END, "5.0")
+        self.ti_text.insert(tk.END, "15.0")
         ## h ##
         self.h_label = tk.Label(self.parameters_frame, bg='white', text="h")
         self.h_label.place(relx=0.1, rely=0.3)
