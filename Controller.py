@@ -178,7 +178,7 @@ def start_com(q, reg):
         if data.startswith("PID"):
             data = data.split(" ")
             print(data)
-            reg.update_params(PIParameters(float(data[0]),float(data[1]),float(data[2]),float(data[3]),float(data[4])))
+            reg.update_params(PIParameters(float(data[1]),float(data[2]),float(data[3]),float(data[4]),float(data[5])))
             print("updated params")
         elif data.startswith("POS"):
             q.put(((float(data.split("|")[1]), float(data.split("|")[2]))))
