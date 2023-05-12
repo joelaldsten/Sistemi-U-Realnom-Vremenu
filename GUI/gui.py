@@ -12,7 +12,7 @@ from matplotlib.animation import FuncAnimation
 class GUI:
     params = []
     def __init__(self):
-        self.fig = plt.figure(figsize=(6,3))
+        self.fig = plt.figure(figsize=(12,8))
         self.x = collections.deque(np.zeros(100))
         self.y = collections.deque(np.zeros(100))
         self.theta = collections.deque(np.zeros(100))
@@ -266,7 +266,7 @@ class GUI:
             print(pos)
             self.robotx = pos[0]
             self.roboty = pos[1]
-            #self.robottheta = pos[2]
+            self.robottheta = pos[2]
 
 
 
@@ -296,17 +296,17 @@ class GUI:
         self.x.append(self.robotx)
         self.y.popleft()
         self.y.append(self.roboty)
-        # self.theta.popleft()
-        # self.theta.append(self.robottheta)
+        self.theta.popleft()
+        self.theta.append(self.robottheta)
 
         self.xplot.cla()
         self.yplot.cla()
-        # self.thetaplot.cla()
+        self.thetaplot.cla()
 
         self.xplot.plot(self.x)
         self.xplot.set_ylim(-3,3)
         self.yplot.plot(self.y)
         self.yplot.set_ylim(-3,3)
-        # self.thetaplot.plot(self.theta)
-        # self.thetaplot.set_ylim(-4,4)
+        self.thetaplot.plot(self.theta)
+        self.thetaplot.set_ylim(-4,4)
 
