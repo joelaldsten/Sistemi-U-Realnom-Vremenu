@@ -49,7 +49,7 @@ u3 = u3(start_idx:stop_idx);
 
 
 L = length(x);
-e = zeros(L);
+e = zeros(L,1);
 
 for i = 1:L
     e(i) = sqrt((x_ref - x(i))^2 + (y_ref - y(i))^2);
@@ -86,10 +86,15 @@ ymin = -2.2;
 ymax = 0.9;
 figure
 plot(x,y,'LineWidth',2)
+grid on
+hold on
+scatter(x(1),y(1),'go','filled')
+scatter(x_ref,y_ref,'ro','filled')
 title('Omnibot path','FontSize',18)
 xlim([xmin, xmax]);
 ylim([ymin, ymax]);
 xlabel('x')
 ylabel('y')
+legend('Path','Starting point','Reference point','FontSize',14)
 
 
