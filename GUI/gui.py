@@ -241,7 +241,7 @@ class GUI:
         self.send_data("STOP")
         print("STOP")
 
-    def get_robot_position_loop(self):
+    def get_robot_position_loop(self, writer):
         f = open('data.csv', 'w')
         writer = csv.writer(f)
         period = 0.2
@@ -264,6 +264,9 @@ class GUI:
             time.sleep(sleep_time)
 
     def run(self):
-        Thread(target = self.get_robot_position_loop).start()
+        f = open('data.csv', 'w')
+        writer = csv.writer(f)
+        Thread(target = self.get_robot_position_loop, args=(writer)).start()
         self.root.mainloop()
+        f.close()
 
