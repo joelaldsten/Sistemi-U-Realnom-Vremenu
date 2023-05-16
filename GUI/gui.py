@@ -5,6 +5,7 @@ import time
 from threading import Thread
 import collections
 import numpy as np
+import csv
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -241,11 +242,15 @@ class GUI:
         print("STOP")
 
     def get_robot_position_loop(self):
+        f = open('data.csv', 'w')
+        writer = csv.writer(f)
         period = 0.2
         while True:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
+
+            writer.writerow(pos)
 
             self.pos_text.delete("1.0", tk.END)
             self.pos_text.insert(tk.END, f"({round(float(pos[0]),2)}, {round(float(pos[1]),2)})\n")
