@@ -242,8 +242,6 @@ class GUI:
         print("STOP")
 
     def get_robot_position_loop(self, writer):
-        f = open('data.csv', 'w')
-        writer = csv.writer(f)
         period = 0.2
         while True:
             t = time.time()
