@@ -21,6 +21,11 @@ class Regul:
         self._r = 0.028*0.45/18 # Wheel radius. Has been fudge-factored because the actual velocity of the wheels did not align with the set-points.
         self._distance_min = 0.05
         self._shouldStop = False
+
+        self.controll_signal = np.zeros(3)
+
+    def get_control_signal(self):
+        return self.controll_signal    
     
     def limit_v(self,v):
         if v > 1023:
@@ -73,6 +78,7 @@ class Regul:
 
             #Output the controlsignals
             self._servo_controller.actuate(v[0], v[1], v[2])
+            self.controll_signal = v
 
             #Update states
             self._PI.update_state(v)
@@ -80,6 +86,7 @@ class Regul:
             self.lock.release()
             if d < self._distance_min or self._shouldStop:
                 self._servo_controller.actuate(0, 0, 0)
+                self.controll_signal = np.zeros(3)
                 if self._shouldStop:
                     while not self.q.empty():
                         self.q.get()

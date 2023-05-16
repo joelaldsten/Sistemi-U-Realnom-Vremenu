@@ -249,6 +249,7 @@ class GUI:
 
             self.pos_text.delete("1.0", tk.END)
             self.pos_text.insert(tk.END, f"({round(float(pos[0]),2)}, {round(float(pos[1]),2)})\n")
+            #pos[3], pos[4] and pos[5] gives wheelspeeds for wheel 1, 2 and 3.
             #printa x (pos[0]) och y (pos[1]) till gui
             #Vet inte hur time funkar är det sekunder? just nu användas 0.2 som period för 5hz.
             t1 = time.time()

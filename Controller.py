@@ -172,12 +172,13 @@ class CrazyLogger:
 
 def start_com(q, reg, cl):
     s = socket.socket()
-    s.connect(("192.168.0.110", 55555))
+    s.connect(("192.168.0.113", 55555))
     print("Connected")
     while True:
         data = s.recv(1024).decode("utf-8")
         if data == "GETPOS":
-            s.sendall(bytes("{}|{}|{}".format(cl.x(), cl.y(), cl.theta()), encoding='utf-8'))
+            u = reg.get_control_signal()
+            s.sendall(bytes("{}|{}|{}|{}|{}|{}".format(cl.x(), cl.y(), cl.theta(), u[0], u[1], u[2]), encoding='utf-8'))
             print("Recived get position")
         elif data.startswith("PID"):
             data = data.split(" ")
