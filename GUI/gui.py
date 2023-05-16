@@ -250,7 +250,7 @@ class GUI:
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
 
-            self.writer.writerow(pos)
+            writer.writerow(pos)
 
             self.pos_text.delete("1.0", tk.END)
             self.pos_text.insert(tk.END, f"({round(float(pos[0]),2)}, {round(float(pos[1]),2)})\n")
