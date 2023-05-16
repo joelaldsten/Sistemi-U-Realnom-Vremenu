@@ -14,6 +14,9 @@ class GUI:
     params = []
     def __init__(self):
 
+        f = open('data.csv', 'w')
+        writer = csv.writer(f)
+
         self.root = tk.Tk()
         self.root.geometry("1200x800")
         self.root.title("Project GUI")
@@ -262,8 +265,6 @@ class GUI:
             time.sleep(sleep_time)
 
     def run(self):
-        f = open('data.csv', 'w')
-        writer = csv.writer(f)
         Thread(target = self.get_robot_position_loop, args=(writer)).start()
         self.root.mainloop()
         f.close()
