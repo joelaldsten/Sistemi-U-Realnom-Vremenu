@@ -14,8 +14,8 @@ class GUI:
     params = []
     def __init__(self):
 
-        f = open('data.csv', 'w')
-        writer = csv.writer(f)
+        self.f = open('data.csv', 'w')
+        self.writer = csv.writer(self.f)
 
         self.root = tk.Tk()
         self.root.geometry("1200x800")
@@ -244,14 +244,14 @@ class GUI:
         self.send_data("STOP")
         print("STOP")
 
-    def get_robot_position_loop(self, writer):
+    def get_robot_position_loop(self):
         period = 0.2
         while True:
             t = time.time()
             self.send_data("GETPOS")
             pos = self.socket.recv(1024).decode("utf-8").split("|")
 
-            writer.writerow(pos)
+            self.writer.writerow(pos)
 
             self.pos_text.delete("1.0", tk.END)
             self.pos_text.insert(tk.END, f"({round(float(pos[0]),2)}, {round(float(pos[1]),2)})\n")
@@ -265,7 +265,7 @@ class GUI:
             time.sleep(sleep_time)
 
     def run(self):
-        Thread(target = self.get_robot_position_loop, args=(writer)).start()
+        Thread(target = self.get_robot_position_loop).start()
         self.root.mainloop()
-        f.close()
+        self.f.close()
 
